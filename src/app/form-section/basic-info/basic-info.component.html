@@ -26,6 +26,7 @@
       <small class="text-gold"
         *ngIf="getFormControl('email').dirty && getFormControl('email').touched && getFormControl('email').invalid && getFormControl('email').hasError('required')">Email
         is required</small>
+      <small class="text-gold" *ngIf="getFormControl('email').hasError('email')">Invalid email format</small>
     </div>
     <div>
       <div class="flex items-end">
