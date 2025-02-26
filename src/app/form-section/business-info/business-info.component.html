@@ -1,0 +1,139 @@
+<div class="mb-10">
+  <h1 class="text-3xl">Business Info</h1>
+  <p class="text-slate-400">Now, let's learn about your business.</p>
+</div>
+
+<form [formGroup]="form">
+  <h6 class="text-lg">What is the approximate average monthly value of all transactions processed by your business?
+  </h6>
+  <p class="text-slate-400">This information helps us understand the scale of your business and tailor our services
+    accordingly.</p>
+  <br>
+  <div class="grid grid-cols-3 gap-4">
+    <button type="button" class="text-left" (click)="setAverageMonthlyTrans('growing')">
+      <div class="card shadow-none border flex items-center hover:shadow-md"
+        [ngClass]="{'border-gold': averageMonthlyTransCategory == 'growing'}">
+        <div>
+          <i-feather name="trending-up" class="text-gold"></i-feather>
+        </div>
+        <div class="ml-4">
+          <p class="text-lg text-gold">Growing</p>
+          <p>Under <b>GHS 5,000</b></p>
+        </div>
+      </div>
+    </button>
+    <button type="button" class="text-left" (click)="setAverageMonthlyTrans('established')">
+      <div class="card shadow-none border flex items-center hover:shadow-md"
+        [ngClass]="{'border-gold': averageMonthlyTransCategory == 'established'}">
+        <div>
+          <i-feather name="award" class="text-gold"></i-feather>
+        </div>
+        <div class="ml-4">
+          <p class="text-lg text-gold">Established</p>
+          <p> <b>GHS 5,000</b> - <b>GHS 15,000</b> </p>
+        </div>
+      </div>
+    </button>
+
+    <button type="button" class="text-left" (click)="setAverageMonthlyTrans('matured')">
+      <div class="card shadow-none border flex items-center hover:shadow-md"
+        [ngClass]="{'border-gold': averageMonthlyTransCategory == 'matured'}">
+        <div>
+          <i-feather name="star" class="text-gold"></i-feather>
+        </div>
+        <div class="ml-4">
+          <p class="text-lg text-gold">Matured</p>
+          <p>Above <b>GHS 15,000</b></p>
+        </div>
+      </div>
+    </button>
+  </div>
+  <br><br>
+
+  <div class="grid grid-cols-3">
+    <div class="col-span-1 flex justify-center items-center">
+      <div>
+        <button type="button" (click)="fileUploadInput.click()"
+          class="border rounded-full p-12 border-2 hover:shadow-md mb-1">
+          <i-feather name="image" style="width: 40px; height: 40px;" class="text-slate-500"></i-feather>
+          <input type="file" #fileUploadInput hidden accept="image/*">
+        </button>
+        <small class="block text-center">Upload Logo</small>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 col-span-2 gap-x-4 gap-y-6">
+      <div>
+        <form-input [type]="'text'" [label]="'Name'" [placeholder]="'Your Business Name'"
+          [controlName]="'business_name'" [group]="form"></form-input>
+      </div>
+      <div>
+        <form-input [type]="'text'" [label]="'Trade Name'" [placeholder]="'Your Business Trade Name'"
+          [controlName]="'trade_name'" [group]="form"></form-input>
+      </div>
+      <div>
+        <label class="block">
+          <span class="block font-medium text-slate-700">Country of Operation<span class="text-gold">*</span></span>
+        </label>
+        <ng-select [placeholder]="'Select Country'" formControlName="country_of_operation" [searchable]="true"
+          [clearable]="false" [items]="countries" bindValue="name" bindLabel="name" class="mt-1">
+          <ng-template ng-option-tmp let-item="item" let-index="index">
+            {{item.flag}}
+            {{item.name}}
+          </ng-template>
+          <ng-template ng-label-tmp let-item="item">
+            {{item.flag}}
+            {{item.name}}
+          </ng-template>
+        </ng-select>
+      </div>
+      <div>
+        <label class="block">
+          <span class="block font-medium text-slate-700">Type of Business<span class="text-gold">*</span></span>
+        </label>
+        <ng-select [placeholder]="'Select a type'" formControlName="company_type" [searchable]="true"
+          [clearable]="false" [items]="companyTypes" class="mt-1">
+        </ng-select>
+      </div>
+      <div>
+        <form-input [type]="'text'" [label]="'Digital Address'" [placeholder]="'XX-XXX-XXXX'"
+          [controlName]="'digital_address'" [group]="form"></form-input>
+      </div>
+      <div>
+        <label class="block">
+          <span class="block font-medium text-slate-700">Categories<span class="text-gold">*</span></span>
+        </label>
+        <ng-select [placeholder]="'Add Product Tags'" formControlName="categories" [searchable]="true"
+          [clearable]="false" [items]="productTags" class="mt-1">
+        </ng-select>
+      </div>
+      <div [ngClass]="{'col-span-full': averageMonthlyTransCategory != 'matured'}">
+        <form-input [type]="'text'" [label]="'Postal Address'" [placeholder]="'Postal Address'"
+          [controlName]="'postal_address'" [group]="form"></form-input>
+      </div>
+      <ng-container *ngIf="averageMonthlyTransCategory == 'matured'">
+        <div>
+          <form-input [type]="'text'" [label]="'Registration No.'" [placeholder]="'...'"
+            [controlName]="'registration_number'" [group]="form"></form-input>
+        </div>
+        <div>
+          <form-input [type]="'text'" [label]="'TIN'" [placeholder]="'...'" [controlName]="'tin'"
+            [group]="form"></form-input>
+        </div>
+        <div>
+          <form-input [type]="'text'" [label]="'Date of Incorporation'" [placeholder]="'...'"
+            [controlName]="'date_of_incorporation'" [group]="form"></form-input>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <br>
+  <div class="text-right">
+    <button class="btn border border-primary shadow-none mr-5" (click)="wizardService.moveToPrevSection()">
+      Back
+    </button>
+    <button class="btn bg-gradient-primary-to-accent text-white" (click)="onNavNext()">
+      Next
+    </button>
+  </div>
+</form>

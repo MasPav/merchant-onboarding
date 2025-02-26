@@ -1,0 +1,67 @@
+<div class="mb-10">
+  <h1 class="text-3xl">Basic Info</h1>
+  <p class="text-slate-400">Welcome! Let's get started. Tell us about your primary contact.</p>
+</div>
+
+<form [formGroup]="form">
+  <div class="grid grid-cols-2 gap-x-4 gap-y-6">
+    <div>
+      <form-input [type]="'text'" [label]="'Surname'" [placeholder]="'Your surname'" [controlName]="'surname'"
+        [group]="form"></form-input>
+      <small class="text-gold"
+        *ngIf="getFormControl('surname').dirty && getFormControl('surname').touched && getFormControl('surname').invalid && getFormControl('surname').hasError('required')">Surname
+        is required</small>
+    </div>
+    <div>
+      <form-input [type]="'text'" [label]="'Other Names'" [placeholder]="'Any other name(s)'"
+        [controlName]="'othernames'" [group]="form"></form-input>
+      <small class="text-gold"
+        *ngIf="getFormControl('othernames').dirty && getFormControl('othernames').touched && getFormControl('othernames').invalid && getFormControl('othernames').hasError('required')">Other
+        Names
+        is required</small>
+    </div>
+    <div>
+      <form-input [type]="'email'" [label]="'Email'" [placeholder]="'Your email address'" [controlName]="'email'"
+        [group]="form"></form-input>
+      <small class="text-gold"
+        *ngIf="getFormControl('email').dirty && getFormControl('email').touched && getFormControl('email').invalid && getFormControl('email').hasError('required')">Email
+        is required</small>
+    </div>
+    <div>
+      <div class="flex items-end">
+        <div class="w-2/5">
+          <label class="block">
+            <span class="block font-medium text-slate-700">Phone Number<span class="text-gold">*</span></span>
+          </label>
+          <ng-select [placeholder]="'Select Country'" formControlName="dial_code" [searchable]="true"
+            [searchable]="true" [clearable]="false" [items]="countries" bindValue="dial_code" bindLabel="name"
+            class="mt-1">
+            <ng-template ng-option-tmp let-item="item" let-index="index">
+              {{item.flag}}
+              {{item.name}}
+              {{item.dial_code}}
+            </ng-template>
+            <ng-template ng-label-tmp let-item="item">
+              {{item.flag}}
+              {{item.dial_code}}
+            </ng-template>
+          </ng-select>
+        </div>
+        <div class="w-full ml-1">
+          <form-input [type]="'text'" [label]="''" [placeholder]="'00 000 000'" [controlName]="'msisdn'"
+            [group]="form"></form-input>
+        </div>
+      </div>
+      <small class="text-gold"
+      *ngIf="getFormControl('msisdn').dirty && getFormControl('msisdn').touched && getFormControl('msisdn').invalid && getFormControl('msisdn').hasError('required')">Phone
+      is required</small>
+    </div>
+    <div>
+    </div>
+  </div>
+  <div class="text-right">
+    <button class="btn bg-gradient-primary-to-accent text-white" (click)="onNavNext()">
+      Next
+    </button>
+  </div>
+</form>

@@ -1,0 +1,29 @@
+<div class="p-10">
+  <div class="grid grid-cols-5 gap-4">
+    <button type="button" class="text-left" *ngFor="let section of wizardService.sections; let i = index"
+      (click)="wizardService.navToSection(i)" [disabled]="(!section.completed && section.hidden)">
+      <div class="card"
+        [ngClass]="{'bg-gradient-primary-to-accent text-white' : !section?.hidden, 'bg-slate-200 text-gray-400': (!section.completed && section.hidden), 'border border-success-500': section.completed}">
+        <div class="flex justify-between">
+          <div>
+            <span class="rounded-full border px-2 py-0.5"
+              [ngClass]="{'border-gray-400': (!section.completed && section.hidden)}">{{i + 1}}</span>
+            <span class="ml-2">{{section.title}}</span>
+          </div>
+          <div *ngIf="section.completed">
+            <i-feather name="check-circle" class="text-success-500 align-bottom"></i-feather>
+          </div>
+        </div>
+      </div>
+    </button>
+  </div>
+  <br>
+  <div class="card pt-10 pb-20">
+    <ng-container *ngIf="wizardService.selectedSection.title == 'Basic Info'">
+      <app-basic-info [form]="getFormGroup('basicInfo')" [countries]="countries"></app-basic-info>
+    </ng-container>
+    <ng-container *ngIf="wizardService.selectedSection.title == 'Business Info'">
+      <app-business-info [form]="getFormGroup('businessInfo')" [countries]="countries"></app-business-info>
+    </ng-container>
+  </div>
+</div>

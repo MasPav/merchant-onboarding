@@ -1,0 +1,24 @@
+@import url('./app/core/css/ng-select.css');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .card {
+        padding: theme('spacing.6');
+        background-color: theme('colors.white');
+        box-shadow: theme('boxShadow.md');
+        border-radius: theme('borderRadius.md');
+    }
+    .btn {
+        @apply py-2 px-5 rounded-md shadow-md focus:ring focus:ring-opacity-75
+    }
+}
+
+@layer utilities {
+    .bg-gradient-primary-to-accent {
+        @apply bg-gradient-to-r from-primary via-secondary to-accent focus:ring-accent;
+    }
+}
+

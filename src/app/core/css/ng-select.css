@@ -1,0 +1,8 @@
+@import url('@ng-select/ng-select/themes/default.theme.css');
+
+.ng-select .ng-select-container{
+    padding: 20px 0px;
+    border-radius: theme('borderRadius.md');
+    border-color: rgb(209 213 219 / var(--tw-border-opacity, 1));
+    box-shadow: theme('boxShadow.sm');
+}
