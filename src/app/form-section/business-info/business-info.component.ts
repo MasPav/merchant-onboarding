@@ -86,15 +86,9 @@ export class BusinessInfoComponent implements OnInit {
   }
 
   private addControls() {
-    if (!this.form.contains("tin")) {
-      this.form.addControl("tin", new FormControl(null, Validators.required));
-    }
-    if (!this.form.contains("registration_number")) {
-      this.form.addControl("registration_number", new FormControl(null, Validators.required));
-    }
-    if (!this.form.contains("date_of_incorporation")) {
-      this.form.addControl("date_of_incorporation", new FormControl(null, Validators.required));
-    }
+    this.form.addControl("tin", new FormControl(null, Validators.required));
+    this.form.addControl("registration_number", new FormControl(null, Validators.required));
+    this.form.addControl("date_of_incorporation", new FormControl(null, Validators.required));
 
     this.form.updateValueAndValidity();
   }
