@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { WizardService } from 'src/app/core/wizard.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 type averageMonthlyTransCategories = 'growing' | 'established' | 'matured';
 
@@ -21,11 +21,39 @@ export class BusinessInfoComponent implements OnInit {
 
   constructor(public wizardService: WizardService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    if (this.form.get("averageMonthlyTransValue")?.value) {
+      this.averageMonthlyTransCategory = this.form.get("averageMonthlyTransValue")?.value;
+    }
+    if (this.form.get("logo")?.value) {
+      const uploadedFile = this.form.get("logo")?.value;
+      this.avatarImage = URL.createObjectURL(uploadedFile);
+    }
+  }
 
   setAverageMonthlyTrans(category: averageMonthlyTransCategories) {
     this.averageMonthlyTransCategory = category;
-    this.form.setValue({averageMonthlyTransValue: category})
+    this.form.patchValue({averageMonthlyTransValue: category});
+
+    if (category === "matured") {
+      this.addControls();
+    } else {
+      this.form.removeControl("tin");
+      this.form.removeControl("registration_number");
+      this.form.removeControl("date_of_incorporation");
+    }
+
+    Object.keys(this.form.controls).forEach((key) => {
+      const control = this.form.get(key);
+      if (control) {
+        control.markAsPristine();
+        control.markAsUntouched();
+      }
+    });
+  }
+
+  getFormControl(controlName: string): FormControl {
+    return this.form.get(controlName) as FormControl;
   }
 
   onNavNext() {
@@ -45,4 +73,29 @@ export class BusinessInfoComponent implements OnInit {
     return this.form.valid
   }
 
+  onFileSelected(event: Event) {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.avatarImage = reader.result as string;
+        this.getFormControl("logo").setValue(file);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  private addControls() {
+    if (!this.form.contains("tin")) {
+      this.form.addControl("tin", new FormControl(null, Validators.required));
+    }
+    if (!this.form.contains("registration_number")) {
+      this.form.addControl("registration_number", new FormControl(null, Validators.required));
+    }
+    if (!this.form.contains("date_of_incorporation")) {
+      this.form.addControl("date_of_incorporation", new FormControl(null, Validators.required));
+    }
+
+    this.form.updateValueAndValidity();
+  }
 }

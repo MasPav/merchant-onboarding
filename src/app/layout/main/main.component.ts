@@ -31,18 +31,14 @@ export class MainComponent implements OnInit {
       }),
       businessInfo: new FormGroup({
         averageMonthlyTransValue: new FormControl('', []),
-        logo: new FormControl('', []),
-        business_name: new FormControl('', []),
-        trade_name: new FormControl('', []),
-        country_of_operation: new FormControl(null, []),
-        company_type: new FormControl(null, []),
-        categories: new FormControl(null, []),
-        digital_address: new FormControl(null, []),
+        logo: new FormControl('', [Validators.required]),
+        business_name: new FormControl('', [Validators.required]),
+        trade_name: new FormControl('', [Validators.required]),
+        country_of_operation: new FormControl(null, [Validators.required]),
+        company_type: new FormControl(null, [Validators.required]),
+        categories: new FormControl(null, [Validators.required]),
+        digital_address: new FormControl(null, [Validators.required]),
         postal_address: new FormControl(null, []),
-        registration_number: new FormControl(null, []),
-        tin: new FormControl(null, []),
-        date_of_incorporation: new FormControl(null, []),
-
       })
     });
     this.getCountries();
