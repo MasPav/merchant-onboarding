@@ -27,7 +27,8 @@ export class MainComponent implements OnInit {
         othernames: new FormControl('', [Validators.required]),
         email: new FormControl('', [Validators.required, Validators.email]),
         dial_code: new FormControl('+233', [Validators.required]),
-        msisdn: new FormControl('', [Validators.required])
+        msisdn: new FormControl('', [Validators.required]),
+        support_contact: new FormControl(false),
       }),
       businessInfo: new FormGroup({
         averageMonthlyTransValue: new FormControl('', []),
