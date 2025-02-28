@@ -71,10 +71,10 @@
     <ng-container *ngTemplateOutlet="titleTemplate; context: { title: 'Support Contact' }"></ng-container>
     <div class="grid grid-cols-2 gap-x-4 gap-y-6">
       <div>
-        <form-input [type]="'text'" [label]="'Surname'" [placeholder]="'Enter support contact surname'" [controlName]="'support_surnname'" [group]="form"></form-input>
+        <form-input [type]="'text'" [label]="'Surname'" [placeholder]="'Enter support contact surname'" [controlName]="'support_surname'" [group]="form"></form-input>
         <small 
           class="text-gold"
-          *ngIf="getFormControl('support_surnname')?.touched && getFormControl('support_surnname')?.hasError('required')"
+          *ngIf="getFormControl('support_surname')?.touched && getFormControl('support_surname')?.hasError('required')"
         >
           Support Contact Name is required
         </small>
@@ -105,7 +105,7 @@
               <span class="block font-medium text-slate-700 whitespace-nowrap">Phone Number<span class="text-gold">*</span></span>
             </label>
             <ng-select 
-              [placeholder]="'Select Country'" formControlName="dial_code" [searchable]="true"
+              [placeholder]="'Select Country'" formControlName="support_dial_code" [searchable]="true"
               [searchable]="true" [clearable]="false" [items]="countries" bindValue="dial_code" bindLabel="name" class="mt-1"
             >
               <ng-template ng-option-tmp let-item="item" let-index="index">
