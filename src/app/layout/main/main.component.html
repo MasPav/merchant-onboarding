@@ -25,5 +25,8 @@
     <ng-container *ngIf="wizardService.selectedSection.title == 'Business Info'">
       <app-business-info [form]="getFormGroup('businessInfo')" [countries]="countries"></app-business-info>
     </ng-container>
+    <ng-container *ngIf="wizardService.selectedSection.title == 'Documents'">
+      <app-form-documents [form]="getFormGroup('documents')"></app-form-documents>
+    </ng-container>
   </div>
 </div>

@@ -31,7 +31,7 @@ export class MainComponent implements OnInit {
         support_contact: new FormControl(false),
       }),
       businessInfo: new FormGroup({
-        averageMonthlyTransValue: new FormControl('', []),
+        averageMonthlyTransValue: new FormControl('', [Validators.required]),
         logo: new FormControl('', [Validators.required]),
         business_name: new FormControl('', [Validators.required]),
         trade_name: new FormControl('', [Validators.required]),
@@ -40,6 +40,14 @@ export class MainComponent implements OnInit {
         categories: new FormControl(null, [Validators.required]),
         digital_address: new FormControl(null, [Validators.required]),
         postal_address: new FormControl(null, []),
+        registration_number: new FormControl(null, []),
+        tin: new FormControl(null, []),
+        date_of_incorporation: new FormControl(null, []),
+
+      }),
+      documents: new FormGroup({
+        regulator_licence: new FormControl(null, []),
+        operation_licence: new FormControl(null, []),
       })
     });
     this.getCountries();

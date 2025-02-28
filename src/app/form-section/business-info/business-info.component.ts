@@ -14,7 +14,7 @@ export class BusinessInfoComponent implements OnInit {
   @Input() form!: FormGroup;
   @Input() countries: any[] = [];
 
-  averageMonthlyTransCategory: averageMonthlyTransCategories = 'established';
+  averageMonthlyTransCategory!: averageMonthlyTransCategories;
   avatarImage: string = '';
   companyTypes = ['Partnership', 'Corporation'];
   productTags = ['Vouchers', 'Agents'];

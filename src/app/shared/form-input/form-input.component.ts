@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 
-type FormInputTypes = 'text'|'number'|'email';
+type FormInputTypes = 'text'|'number'|'email'|'date';
 
 @Component({
   selector: 'form-input',
