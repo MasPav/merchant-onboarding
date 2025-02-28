@@ -75,6 +75,23 @@
         </ng-template>
     </div>
 
+    <div>
+        <label class="w-fit flex items-center space-x-2 text-gray-700 cursor-pointer">
+            <input type="checkbox" [(ngModel)]="isChecked" class="h-4 w-4 text-blue-600 border-gray-300 rounded">
+            <span>I agree to the <a (click)="navigateToPrivacyPolicy($event)"  class="text-blue-600 hover:underline">Terms & Conditions</a> provided.</span>
+        </label>
+    </div>
+
+    <br>
+    <div class="text-right">
+        <button class="btn border border-primary shadow-none mr-5" (click)="wizardService.moveToPrevSection()">
+            Back
+        </button>
+        <button [disabled]="!isChecked" class="btn bg-gradient-primary-to-accent text-white">
+            Submit
+        </button>
+    </div>
+
     <ng-template #titleTemplate let-title="title">
         <div class="bg-slate-100 px-2">
             <p class="text-slate-400">{{ title }}</p>
