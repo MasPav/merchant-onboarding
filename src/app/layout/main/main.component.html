@@ -28,5 +28,8 @@
     <ng-container *ngIf="wizardService.selectedSection.title == 'Documents'">
       <app-form-documents [form]="getFormGroup('documents')"></app-form-documents>
     </ng-container>
+    <ng-container *ngIf="wizardService.selectedSection.title == 'Preview'">
+      <app-preview [form]="form" [countries]="countries"></app-preview>
+    </ng-container>
   </div>
 </div>

@@ -1,0 +1,106 @@
+<div class="space-y-6">
+    <div class="flex flex-col gap-2 items-center text-center">
+        <div class="w-28 h-28 border rounded-full">
+            <img 
+                *ngIf="avatarImage" 
+                [src]="avatarImage" 
+                alt="Business Logo" 
+                class="w-full h-full rounded-full shadow-md object-cover"
+            >
+        </div>
+    
+        <h1 class="text-2xl font-semibold text-gray-900">
+            {{ businessInfo.business_name }}
+        </h1>
+        <p class="flex items-center gap-3 text-gray-600 text-sm mt-1">
+            <span class="px-3 py-1 rounded-full text-blue-600 bg-blue-100 text-sm font-medium">{{ businessInfo.trade_name }}</span> 
+            <span class="px-3 py-1 rounded-full text-green-600 bg-green-100 text-sm font-medium">{{ businessInfo.country_of_operation }}</span> 
+            <span class="px-3 py-1 rounded-full text-purple-600 bg-purple-100 text-sm font-medium">{{ businessInfo.company_type }}</span>
+        </p>
+    </div>
+  
+    <div *ngIf="basicInfo" class="bg-white flex flex-col gap-4 shadow-md rounded-lg p-6">
+        <h2 class="text-xl font-medium text-gray-800">Basic Info</h2>
+        <ng-container *ngTemplateOutlet="titleTemplate, context: { title: 'Primary Contact' }"></ng-container>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Surname', value: basicInfo.surname }"></ng-container>
+            <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Other Names', value: basicInfo.othernames }"></ng-container>
+            <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Email', value: basicInfo.email }"></ng-container>
+            <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Phone Number', value: basicInfo.dial_code + ' ' + basicInfo.msisdn }"></ng-container>
+            <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Support Contact', value: basicInfo.support_contact ? 'Yes' : 'No' }">
+            </ng-container>
+        </div>
+        <ng-container *ngIf="basicInfo?.support_contact">
+            <ng-container *ngTemplateOutlet="titleTemplate; context: { title: 'Support Contact' }"></ng-container>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Surname', value: basicInfo.support_surname }"></ng-container>
+                <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Other Names', value: basicInfo.support_othernames }"></ng-container>
+                <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Email', value: basicInfo.support_email }"></ng-container>
+                <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Phone Number', value: basicInfo.support_dial_code + ' ' + basicInfo.support_msisdn }"></ng-container>
+            </div>
+        </ng-container>
+    </div>
+  
+    <div *ngIf="businessInfo" class="bg-white flex flex-col gap-4 shadow-md rounded-lg p-6">
+        <h2 class="text-xl font-medium text-gray-800">Business Info</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Average Monthly Transaction Value', value: averageMonthlyTransMap[businessInfo.averageMonthlyTransValue] }"></ng-container>
+            <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Business Name', value: businessInfo.business_name }"></ng-container>
+            <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Trade Name', value: businessInfo.trade_name }"></ng-container>
+            <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Country of Operation', value: businessInfo.country_of_operation }"></ng-container>
+            <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Company Type', value: businessInfo.company_type }"></ng-container>
+            <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Categories', value: businessInfo.categories }"></ng-container>
+            <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Digital Address', value: businessInfo.digital_address }"></ng-container>
+            <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Postal Address', value: businessInfo.postal_address || 'N/A' }"></ng-container>
+        </div>
+    </div>
+  
+    <div class="bg-white flex flex-col gap-4 shadow-md rounded-lg p-6">
+        <h2 class="text-xl font-medium text-gray-800">Documents</h2>
+    
+        <div *ngIf="documents.length > 0; else noDocuments" class="space-y-3">
+            <div *ngFor="let doc of documents" class="p-3 border rounded-md bg-gray-50">
+                <div class="flex items-center gap-3">
+                    <img src="assets/images/pdf.png" alt="PDF Icon" style="width: 30px;" class="object-cover">
+                    <div class="flex flex-col">
+                        <span class="text-sm">{{ doc.category }}</span>
+                        <span class="text-xs text-gray-500">{{ doc.name }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <ng-template #noDocuments>
+            <p class="text-sm text-gray-500">No documents uploaded yet.</p>
+        </ng-template>
+    </div>
+
+    <div>
+        <label class="w-fit flex items-center space-x-2 text-gray-700 cursor-pointer">
+            <input type="checkbox" [(ngModel)]="isChecked" class="h-4 w-4 text-blue-600 border-gray-300 rounded">
+            <span>I agree to the <a (click)="navigateToPrivacyPolicy($event)"  class="text-blue-600 hover:underline">Terms & Conditions</a> provided.</span>
+        </label>
+    </div>
+
+    <br>
+    <div class="text-right">
+        <button class="btn border border-primary shadow-none mr-5" (click)="wizardService.moveToPrevSection()">
+            Back
+        </button>
+        <button [disabled]="!isChecked" class="btn bg-gradient-primary-to-accent text-white">
+            Submit
+        </button>
+    </div>
+
+    <ng-template #titleTemplate let-title="title">
+        <div class="bg-slate-100 px-2">
+            <p class="text-slate-400">{{ title }}</p>
+        </div>
+    </ng-template>
+    <ng-template #infoTemplate let-title="title" let-value="value" let-colourClass="colourClass">
+        <div>
+            <span class="text-sm text-gray-500">{{ title }}</span> <br>
+            <span [ngClass]="colourClass">{{ value }}</span>
+        </div>
+    </ng-template>
+</div>
