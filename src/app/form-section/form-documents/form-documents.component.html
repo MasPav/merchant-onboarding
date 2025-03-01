@@ -1,6 +1,7 @@
 <div class="mb-10">
   <h1 class="text-3xl">Documents</h1>
   <p class="text-slate-400">Please upload the necessary documents in the corresponding categories.</p>
+  <small class="text-sm text-gold">Only <b>pdf</b> files with max of <b>10MB</b></small>
 </div>
 
 <form [formGroup]="form">
@@ -51,34 +52,63 @@
     </div>
   </div> -->
   <!-- Alternate Design -->
-
-  <ng-container *ngFor="let category of documentCategories | keyvalue; let last = last">
-    <div class="card border mb-3 p-3">
-      <div class="flex justify-between items-center">
-        <div class="flex items-center">
-          <div class="mr-3">
-            <img src="assets/images/pdf.png" alt="PDF Icon" style="width: 30px;" class="object-cover">
+    <ng-container *ngFor="let category of documentCategories | keyvalue">
+      <div class="card border mb-3 p-3">
+        <div class="flex justify-between items-center">
+          <div class="flex items-center">
+            <div class="mr-3">
+              <img src="assets/images/pdf.png" alt="PDF Icon" style="width: 30px;" class="object-cover">
+            </div>
+            <div>
+              <p class="text-sm">{{ category.value }}</p>
+              <small class="text-accent mt-0" *ngIf="uploadedFiles[category.key]">
+                {{ uploadedFiles[category.key]?.name }}
+              </small>
+              <small class="text-gold mt-0" *ngIf="fileValidationTriggered && !uploadedFiles[category.key]">
+                You need to upload a file
+              </small>
+            </div>
           </div>
           <div>
-            <p class="text-sm">{{category.value}}</p>
+            <button *ngIf="!uploadedFiles[category.key]" (click)="fileUploader.click()" class="btn border border-primary shadow-none px-3 py-1 text-sm me-2">
+              <input type="file" name="fileUploader" accept=".csv,.xlsx" hidden #fileUploader (change)="onFileSelected($event, category.key)">
+              Upload
+            </button>
+    
+            <button *ngIf="uploadedFiles[category.key]" 
+              (click)="removeFile(category.key)"
+              class="btn bg-red-500 hover:bg-red-600 text-white border border-red-700 shadow-none px-3 py-1 text-sm rounded">
+              <!-- <i data-feather="trash"></i>
+              <i-feather name="trash-2"></i-feather>  -->
+              Remove
+            </button>
           </div>
         </div>
-        <div>
-          <button class="btn border border-primary shadow-none px-3 py-1 text-sm">
-            Upload
-          </button>
-        </div>
       </div>
+    </ng-container>
+    
+    <br>
+    <div class="text-right">
+      <button class="btn border border-primary shadow-none mr-5" (click)="wizardService.moveToPrevSection()">
+        Back
+      </button>
+      <button 
+        class="btn bg-gradient-primary-to-accent text-white" 
+        (click)="onNavNext();">
+        Next
+        </button>
     </div>
-  </ng-container>
-
-  <br>
-  <div class="text-right">
-    <button class="btn border border-primary shadow-none mr-5" (click)="wizardService.moveToPrevSection()">
-      Back
-    </button>
-    <button class="btn bg-gradient-primary-to-accent text-white">
-      Next
-    </button>
-  </div>
 </form>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">My Modal</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <p>This is a modal content!</p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-secondary" (click)="modal.close('Close click')">Close</button>
+  </div>
+</ng-template>

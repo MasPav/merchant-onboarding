@@ -11,7 +11,7 @@ import { SharedModule } from '../shared/shared.module';
 @NgModule({
   imports: [
     SharedModule,
-    FormSectionModule,
+    FormSectionModule
   ],
   declarations: [LayoutComponent, SidebarComponent, MainComponent, FooterComponent]
 })
