@@ -62,7 +62,7 @@
             <div>
               <p class="text-sm">{{ category.value }}</p>
               <small class="text-accent mt-0" *ngIf="uploadedFiles[category.key]">
-                {{ uploadedFiles[category.key].name }}
+                {{ uploadedFiles[category.key].name || uploadedFiles[category.key] }}
               </small>
               <small class="text-gold mt-0" *ngIf="fileValidationTriggered && !uploadedFiles[category.key]">
                 You need to upload a file

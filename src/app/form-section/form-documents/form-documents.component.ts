@@ -16,7 +16,12 @@ export class FormDocumentsComponent implements OnInit {
   fileValidationTriggered: boolean = false;
   constructor(public wizardService: WizardService) { }
 
-  ngOnInit() { }
+  ngOnInit() { 
+    window.onbeforeunload = () => {
+      sessionStorage.removeItem('uploadedFiles');
+    };
+    this.loadUploadedFiles();
+  }
 
   onSelectCategory(category: any) {
     this.selectedCategory = category;
@@ -40,14 +45,27 @@ export class FormDocumentsComponent implements OnInit {
     }
   }
 
-  onFileSelected(event: Event, categoryKey: string) {
-    const fileInput = event.target as HTMLInputElement;
-    if (fileInput.files && fileInput.files.length > 0) {
-      const file = fileInput.files[0];
-      this.uploadedFiles[categoryKey] = {
-        name: file.name,
-        url: URL.createObjectURL(file)
-      };
+  onFileSelected(event: any, categoryKey: string) {
+    const file = event.target.files[0];
+    if (file) {
+      this.uploadedFiles[categoryKey] = file;
+      this.saveUploadedFiles();
+    }
+  }
+
+  saveUploadedFiles() {
+    const filesToSave = Object.keys(this.uploadedFiles).reduce((acc, key) => {
+      acc[key] = this.uploadedFiles[key].name;
+      return acc;
+    }, {} as { [key: string]: string });
+
+    sessionStorage.setItem('uploadedFiles', JSON.stringify(filesToSave));
+  }
+
+  loadUploadedFiles() {
+    const savedFiles = sessionStorage.getItem('uploadedFiles');
+    if (savedFiles) {
+      this.uploadedFiles = JSON.parse(savedFiles);
     }
   }
   
