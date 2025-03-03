@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { WizardService } from 'src/app/core/wizard.service';
 @Component({
@@ -10,8 +10,7 @@ export class FormDocumentsComponent implements OnInit {
 
   @ViewChild('fileUploader') fileUploader!: ElementRef;
   @Input() form!: FormGroup;
-  @Output () filesEmitted = new EventEmitter();
-  documentCategories = { 'ghanaCard': 'Ghana Card of All Company Directors (Foreigners can provide their passports)', 'regulatorLicence': 'Licence From Regulator (where applicable)', 'operationLicence': 'Licence To Operate Product (where applicable)', 'ownershipStructure': 'Ownership structure and documentation such as the Shareholders Register (where applicable)'};
+  documentCategories = { 'ghana_card': 'Ghana Card of All Company Directors (Foreigners can provide their passports)', 'regulator_licence': 'Licence From Regulator (where applicable)', 'operation_licence': 'Licence To Operate Product (where applicable)', 'ownership_structure': 'Ownership structure and documentation such as the Shareholders Register (where applicable)'};
   selectedCategory: any = null;
   uploadedFiles: { [key: string]: { name: string; url: string } } = {};
   fileValidationTriggered: boolean = false;
@@ -71,6 +70,10 @@ export class FormDocumentsComponent implements OnInit {
         url: URL.createObjectURL(file)
       };
       this.saveUploadedFiles();
+      if (this.form.get(categoryKey)) {
+        this.form.get(categoryKey)?.setValue(URL.createObjectURL(file));
+      }
+      console.log(this.form.value)
     }
   }
   
@@ -85,6 +88,5 @@ export class FormDocumentsComponent implements OnInit {
       file: fileData.url
     }));
     console.log('Files to be saved:', filesArray);
-    this.filesEmitted.emit(filesArray)
   }
 }

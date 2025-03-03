@@ -45,9 +45,11 @@ export class MainComponent implements OnInit {
         date_of_incorporation: new FormControl(null, []),
 
       }),
-      documents: new FormGroup({
+      uploaded_documents: new FormGroup({
         regulator_licence: new FormControl(null, []),
         operation_licence: new FormControl(null, []),
+        ghana_card: new FormControl(null, []),
+        ownership_structure: new FormControl(null, []),
       })
     });
     this.getCountries();
@@ -67,9 +69,5 @@ export class MainComponent implements OnInit {
           this.countries = res;
         }
       })
-  }
-  
-  onFileReceived(data: any){
-  console.log(data)
   }
 }
