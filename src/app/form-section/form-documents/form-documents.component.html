@@ -1,7 +1,7 @@
 <div class="mb-10">
   <h1 class="text-3xl">Documents</h1>
   <p class="text-slate-400">Please upload the necessary documents in the corresponding categories.</p>
-  <small class="text-sm text-gold">Only <b>pdf</b> files with max of <b>10MB</b></small>
+  <small class="text-sm text-gold">Only <b>pdf</b> files are accepted, with max size of <b>10MB</b>. Larger files or other formats will be rejected.</small>
 </div>
 
 <form [formGroup]="form">
@@ -62,7 +62,7 @@
             <div>
               <p class="text-sm">{{ category.value }}</p>
               <small class="text-accent mt-0" *ngIf="uploadedFiles[category.key]">
-                {{ uploadedFiles[category.key]?.name }}
+                {{ uploadedFiles[category.key].name }}
               </small>
               <small class="text-gold mt-0" *ngIf="fileValidationTriggered && !uploadedFiles[category.key]">
                 You need to upload a file
@@ -71,17 +71,10 @@
           </div>
           <div>
             <button *ngIf="!uploadedFiles[category.key]" (click)="fileUploader.click()" class="btn border border-primary shadow-none px-3 py-1 text-sm me-2">
-              <input type="file" name="fileUploader" accept=".csv,.xlsx" hidden #fileUploader (change)="onFileSelected($event, category.key)">
+              <input type="file" name="fileUploader" accept=".pdf" hidden #fileUploader (change)="onFileSelected($event, category.key)">
               Upload
             </button>
-    
-            <button *ngIf="uploadedFiles[category.key]" 
-              (click)="removeFile(category.key)"
-              class="btn bg-red-500 hover:bg-red-600 text-white border border-red-700 shadow-none px-3 py-1 text-sm rounded">
-              <!-- <i data-feather="trash"></i>
-              <i-feather name="trash-2"></i-feather>  -->
-              Remove
-            </button>
+            <span *ngIf="uploadedFiles[category.key]"><i-feather (click)="removeFile(category.key)" name="Trash2" class="cursor-pointer text-red-500"></i-feather></span>
           </div>
         </div>
       </div>
