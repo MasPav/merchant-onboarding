@@ -16,11 +16,10 @@ export class FormDocumentsComponent implements OnInit {
   fileValidationTriggered: boolean = false;
   constructor(public wizardService: WizardService) { }
 
-  ngOnInit() { 
-    window.onbeforeunload = () => {
-      sessionStorage.removeItem('uploadedFiles');
-    };
-    this.loadUploadedFiles();
+  ngOnInit() {
+    if(this.form.value.uploaded_documents){
+      this.uploadedFiles = this.form.value.uploaded_documents;
+    }
   }
 
   onSelectCategory(category: any) {
@@ -45,22 +44,6 @@ export class FormDocumentsComponent implements OnInit {
     }
   }
 
-  saveUploadedFiles() {
-    const filesToSave = Object.keys(this.uploadedFiles).reduce((acc, key) => {
-      acc[key] = this.uploadedFiles[key].name;
-      return acc;
-    }, {} as { [key: string]: string });
-
-    sessionStorage.setItem('uploadedFiles', JSON.stringify(filesToSave));
-  }
-
-  loadUploadedFiles() {
-    const savedFiles = sessionStorage.getItem('uploadedFiles');
-    if (savedFiles) {
-      this.uploadedFiles = JSON.parse(savedFiles);
-    }
-  }
-
   onFileSelected(event: Event, categoryKey: string) {
     const fileInput = event.target as HTMLInputElement;
     if (fileInput.files && fileInput.files.length > 0) {
@@ -69,24 +52,25 @@ export class FormDocumentsComponent implements OnInit {
         name: file.name,
         url: URL.createObjectURL(file)
       };
-      this.saveUploadedFiles();
-      if (this.form.get(categoryKey)) {
-        this.form.get(categoryKey)?.setValue(URL.createObjectURL(file));
-      }
-      console.log(this.form.value)
     }
   }
-  
+
   removeFile(categoryKey: string) {
     delete this.uploadedFiles[categoryKey];
-    this.saveUploadedFiles();
   }
   
   saveAllFiles() {
     const filesArray = Object.entries(this.uploadedFiles).map(([category, fileData]) => ({
       category,
-      file: fileData.url
+      file: fileData
     }));
-    console.log('Files to be saved:', filesArray);
+    const uploadedDocs: any = {};
+    filesArray.forEach(item => {
+      uploadedDocs[item.category] = {
+        name: item.file.name,
+        url: item.file.url
+      };
+    });
+    this.form.get('uploaded_documents')?.setValue(uploadedDocs);
   }
 }

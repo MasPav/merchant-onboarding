@@ -29,13 +29,11 @@ export class PreviewComponent implements OnInit {
   ngOnInit(): void {
     this.basicInfo = this.form.get("basicInfo")?.value || {};
     this.businessInfo = this.form.get("businessInfo")?.value || {};
-    this.documents = this.form.get("uploaded_documents")?.value || {};
-    
+    this.documents = this.form.get("documents.uploaded_documents")?.value || {};
     if (this.businessInfo.logo) {
       const uploadedFile = this.businessInfo.logo;
       this.avatarImage = URL.createObjectURL(uploadedFile);
     }
-    console.log(this.documents)
   }
 
   navigateToPrivacyPolicy(event: Event) {
