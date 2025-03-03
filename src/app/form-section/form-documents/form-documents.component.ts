@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { WizardService } from 'src/app/core/wizard.service';
 @Component({
   selector: 'app-form-documents',
@@ -16,15 +16,10 @@ export class FormDocumentsComponent implements OnInit {
   fileValidationTriggered: boolean = false;
   constructor(public wizardService: WizardService) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   onSelectCategory(category: any) {
     this.selectedCategory = category;
-  }
-
-  getFormControl(controlName: string): FormControl {
-    return this.form.get(controlName) as FormControl;
   }
   
   isNextDisabled(): boolean {
@@ -43,21 +38,6 @@ export class FormDocumentsComponent implements OnInit {
       this.wizardService.markSectionAsCompleted(this.wizardService.selectedSection);
       this.wizardService.moveToNextSection();
     }
-  }
-
-  validateForm(): boolean {
-    Object.keys(this.form.controls).forEach(key => {
-      this.form.get(key)?.markAsDirty();
-      this.form.get(key)?.markAsTouched();
-    });
-    return this.form.valid
-  }
-
-  private addControls() {
-    this.form.addControl("tin", new FormControl(null, Validators.required));
-    this.form.addControl("registration_number", new FormControl(null, Validators.required));
-    this.form.addControl("date_of_incorporation", new FormControl(null, Validators.required));
-    this.form.updateValueAndValidity();
   }
 
   onFileSelected(event: Event, categoryKey: string) {
