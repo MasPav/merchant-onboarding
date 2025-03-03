@@ -1,57 +1,11 @@
 <div class="mb-10">
   <h1 class="text-3xl">Documents</h1>
   <p class="text-slate-400">Please upload the necessary documents in the corresponding categories.</p>
-  <small class="text-sm text-gold">Only <b>pdf</b> files are accepted, with max size of <b>10MB</b>. Larger files or other formats will be rejected.</small>
+  <small class="text-sm text-gold">
+    You can upload images and PDF files. Maximum file size: <span class="text-accent">10MB</span> per category</small>
 </div>
 
 <form [formGroup]="form">
-  <!-- Alternate Design -->
-  <!-- <div class="grid grid-cols-7 gap-5">
-    <div class="col-span-3">
-      <div class="rounded-md border shadow-none">
-        <ng-container *ngFor="let category of documentCategories | keyvalue; let last = last">
-          <button type="button" class="w-full hover:bg-slate-200"
-            [ngClass]="{'bg-slate-200': selectedCategory == category}" (click)="onSelectCategory(category)">
-            <div class="px-6 py-3 text-left" [ngClass]="{'border-b': !last}">
-              {{category.value}}
-              <i-feather name="check" style="width: 15px;" class="text-accent align-middle ml-2" *ngIf="last"></i-feather>
-            </div>
-          </button>
-        </ng-container>
-      </div>
-    </div>
-    <div class="col-span-4">
-      <button type="button" class="w-full">
-        <div class="card rounded border-2 border-accent border-dashed">
-          <i-feather name="upload" style="width: 40px;" class="text-accent"></i-feather>
-          <div class="mt-5">
-            <h6 class="text-lg text-accent">Click to select a file</h6>
-            <p class="text-sm text-slate-400">Only <b>pdf</b> files with max of <b>10MB</b></p>
-          </div>
-        </div>
-      </button>
-
-      <div class="text-center mt-10 mb-5">
-        <h6>Uploaded Files</h6>
-        <p class="text-sm text-slate-400">Your uploaded files will show here.</p>
-      </div>
-      <div>
-        <div class="card border mb-2 p-3">
-          <div class="flex items-center">
-            <div class="mr-3">
-              <img src="assets/images/pdf.png" alt="PDF Icon" style="width: 20px;"
-              class="object-cover">
-            </div>
-            <div>
-              <p class="mb-0 leading-3">Sample_File.pdf</p>
-              <small class="text-slate-400">Licence From Regulator (where applicable)</small>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> -->
-  <!-- Alternate Design -->
     <ng-container *ngFor="let category of documentCategories | keyvalue">
       <div class="card border mb-3 p-3">
         <div class="flex justify-between items-center">
@@ -60,12 +14,12 @@
               <img src="assets/images/pdf.png" alt="PDF Icon" style="width: 30px;" class="object-cover">
             </div>
             <div>
-              <p class="text-sm">{{ category.value }}</p>
+              <p class="text-sm leading-3">{{ category.value }}</p>
               <small class="text-accent mt-0" *ngIf="uploadedFiles[category.key]">
                 {{ uploadedFiles[category.key].name || uploadedFiles[category.key] }}
               </small>
               <small class="text-gold mt-0" *ngIf="fileValidationTriggered && !uploadedFiles[category.key]">
-                You need to upload a file
+                You forgot to upload a file
               </small>
             </div>
           </div>
@@ -92,16 +46,3 @@
         </button>
     </div>
 </form>
-
-<ng-template #content let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title">My Modal</h4>
-    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
-  </div>
-  <div class="modal-body">
-    <p>This is a modal content!</p>
-  </div>
-  <div class="modal-footer">
-    <button class="btn btn-secondary" (click)="modal.close('Close click')">Close</button>
-  </div>
-</ng-template>
