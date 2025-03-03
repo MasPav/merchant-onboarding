@@ -68,5 +68,8 @@ export class MainComponent implements OnInit {
         }
       })
   }
-
+  
+  onFileReceived(data: any){
+  console.log(data)
+  }
 }
