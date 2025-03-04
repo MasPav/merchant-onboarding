@@ -18,7 +18,7 @@
               <small class="text-accent mt-0" *ngIf="uploadedFiles[category.key]">
                 {{ uploadedFiles[category.key].name }}
               </small>
-              <small class="text-gold mt-0" *ngIf="fileValidationTriggered && !uploadedFiles[category.key]">
+              <small class="text-red-600 mt-0" *ngIf="fileValidationTriggered && !uploadedFiles[category.key]">
                 You forgot to upload a file
               </small>
             </div>
