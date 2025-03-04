@@ -48,13 +48,15 @@ export class FormDocumentsComponent implements OnInit {
     }
   }
 
-  onFileSelected(event: Event, categoryKey: string) {
+  onFileSelected(event: Event, category: {key: any, value:any}) {
+    const categoryKey = category.key
     const fileInput = event.target as HTMLInputElement;
     if (fileInput.files && fileInput.files.length > 0) {
       const file = fileInput.files[0];
       this.uploadedFiles[categoryKey] = {
         name: file.name,
-        url: URL.createObjectURL(file)
+        url: URL.createObjectURL(file),
+        categoryValue: category.value
       };
     }
   }
@@ -67,7 +69,8 @@ export class FormDocumentsComponent implements OnInit {
     const filesArray = Object.entries(this.uploadedFiles).map(([category, fileData]: [string, any]) => ({
       name: fileData.name,
       url: fileData.url,
-      category: category
+      category: category,
+      category_value: fileData.categoryValue
     }));
     this.form.get('uploaded_documents')?.setValue(filesArray);
   }
