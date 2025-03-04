@@ -1,7 +1,7 @@
 <ng-container [formGroup]="group">
   <label class="block">
     <span class="block font-medium text-slate-700" *ngIf="label">{{label}}<ng-container *ngIf="isRequired"><span
-          class="text-gold">*</span>
+          class="text-red-600">*</span>
       </ng-container></span>
     <input [type]="type" [placeholder]="placeholder" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
       [formControlName]="controlName" />

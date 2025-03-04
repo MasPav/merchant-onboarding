@@ -27,6 +27,8 @@ export const environment = {
    APP_NAME: "${process.env["APP_NAME"]}",
    API_URL: "${process.env["API_URL"]}",
    LOCAL_STORAGE_KEY: "${process.env['LOCAL_STORAGE_KEY']}",
+   MERCHANT_CATALOGUE_API_URL: "${process.env['MERCHANT_CATALOGUE_API_URL']}",
+   MERCHANT_CATALOGUE_API_KEY: "${process.env['MERCHANT_CATALOGUE_API_KEY']}",
 };
 `;
 // write the content to the respective file

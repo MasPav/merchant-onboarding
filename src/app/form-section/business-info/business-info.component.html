@@ -49,7 +49,7 @@
       </div>
     </button>
   </div>
-  <p class="text-gold"
+  <p class="text-red-600"
     *ngIf="getFormControl('averageMonthlyTransValue').dirty && getFormControl('averageMonthlyTransValue').touched && getFormControl('averageMonthlyTransValue').invalid && getFormControl('averageMonthlyTransValue').hasError('required')">
     You forgot to give us a value</p>
   <br><br>
@@ -67,7 +67,7 @@
             <input type="file" #fileUploadInput hidden accept="image/*" (change)="onFileSelected($event)">
           </button>
           <small class="block text-center">Upload Logo</small>
-          <small class="text-gold"
+          <small class="text-red-600"
             *ngIf="getFormControl('logo').dirty && getFormControl('logo').touched && getFormControl('logo').invalid && getFormControl('logo').hasError('required')">Business
             logo is required</small>
         </div>
@@ -76,20 +76,20 @@
         <div>
           <form-input [type]="'text'" [label]="'Name'" [placeholder]="'Your Business Name'"
             [controlName]="'business_name'" [group]="form"></form-input>
-          <small class="text-gold"
+          <small class="text-red-600"
             *ngIf="getFormControl('business_name').dirty && getFormControl('business_name').touched && getFormControl('business_name').invalid && getFormControl('business_name').hasError('required')">Business
             name is required</small>
         </div>
         <div>
           <form-input [type]="'text'" [label]="'Trade Name'" [placeholder]="'Your Business Trade Name'"
             [controlName]="'trade_name'" [group]="form"></form-input>
-          <small class="text-gold"
+          <small class="text-red-600"
             *ngIf="getFormControl('trade_name').dirty && getFormControl('trade_name').touched && getFormControl('trade_name').invalid && getFormControl('trade_name').hasError('required')">Trade
             name is required</small>
         </div>
         <div>
           <label class="block">
-            <span class="block font-medium text-slate-700">Country of Operation<span class="text-gold">*</span></span>
+            <span class="block font-medium text-slate-700">Country of Operation<span class="text-red-600">*</span></span>
           </label>
           <ng-select [placeholder]="'Select Country'" formControlName="country_of_operation" [searchable]="true"
             [clearable]="false" [items]="countries" bindValue="name" bindLabel="name" class="mt-1">
@@ -102,36 +102,36 @@
               {{item.name}}
             </ng-template>
           </ng-select>
-          <small class="text-gold"
+          <small class="text-red-600"
             *ngIf="getFormControl('country_of_operation').dirty && getFormControl('country_of_operation').touched && getFormControl('country_of_operation').invalid && getFormControl('country_of_operation').hasError('required')">Country
             of operation is required</small>
         </div>
         <div>
           <label class="block">
-            <span class="block font-medium text-slate-700">Type of Business<span class="text-gold">*</span></span>
+            <span class="block font-medium text-slate-700">Type of Business<span class="text-red-600">*</span></span>
           </label>
           <ng-select [placeholder]="'Select a type'" formControlName="company_type" [searchable]="true"
             [clearable]="false" [items]="companyTypes" class="mt-1">
           </ng-select>
-          <small class="text-gold"
+          <small class="text-red-600"
             *ngIf="getFormControl('company_type').dirty && getFormControl('company_type').touched && getFormControl('company_type').invalid && getFormControl('company_type').hasError('required')">Type
             of business is required</small>
         </div>
         <div>
           <form-input [type]="'text'" [label]="'Digital Address'" [placeholder]="'XX-XXX-XXXX'"
             [controlName]="'digital_address'" [group]="form"></form-input>
-          <small class="text-gold"
+          <small class="text-red-600"
             *ngIf="getFormControl('digital_address').dirty && getFormControl('digital_address').touched && getFormControl('digital_address').invalid && getFormControl('digital_address').hasError('required')">Digital
             address is required</small>
         </div>
         <div>
           <label class="block">
-            <span class="block font-medium text-slate-700">Categories<span class="text-gold">*</span></span>
+            <span class="block font-medium text-slate-700">Categories<span class="text-red-600">*</span></span>
           </label>
           <ng-select [placeholder]="'Add Product Tags'" formControlName="categories" [searchable]="true"
-            [clearable]="false" [items]="productTags" class="mt-1">
+            [clearable]="false" [loading]="isTaglistLoading" [items]="productTags" class="mt-1">
           </ng-select>
-          <small class="text-gold"
+          <small class="text-red-600"
             *ngIf="getFormControl('categories').dirty && getFormControl('categories').touched && getFormControl('categories').invalid && getFormControl('categories').hasError('required')">Category
             is required</small>
         </div>
@@ -143,24 +143,24 @@
           <div>
             <form-input [type]="'text'" [label]="'Registration No.'" [placeholder]="'...'"
               [controlName]="'registration_number'" [group]="form"></form-input>
-            <small class="text-gold"
+            <small class="text-red-600"
               *ngIf="getFormControl('registration_number').dirty && getFormControl('registration_number').touched && getFormControl('registration_number').invalid && getFormControl('registration_number').hasError('required')">Registration
               No. is required</small>
           </div>
           <div>
             <form-input [type]="'text'" [label]="'TIN'" [placeholder]="'...'" [controlName]="'tin'"
               [group]="form"></form-input>
-            <small class="text-gold"
+            <small class="text-red-600"
               *ngIf="getFormControl('tin').dirty && getFormControl('tin').touched && getFormControl('tin').invalid && getFormControl('tin').hasError('required')">TIN
               is required</small>
           </div>
           <div>
             <label class="block">
               <span class="block font-medium text-slate-700">Date of Incorporation <span
-                class="text-gold">*</span>
+                class="text-red-600">*</span>
               </span>
               <pikaday-picker [controlName]="'date_of_incorporation'" [group]="form" [placeholder]="'YYYY-MM-DD'"></pikaday-picker>
-              <small class="text-gold"
+              <small class="text-red-600"
               *ngIf="getFormControl('date_of_incorporation').dirty && getFormControl('date_of_incorporation').touched && getFormControl('date_of_incorporation').invalid && getFormControl('date_of_incorporation').hasError('required')">Date
               of incorporation is required</small>
             </label>

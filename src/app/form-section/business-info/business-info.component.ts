@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { environment } from 'src/environments/environment';
 import { WizardService } from 'src/app/core/wizard.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 type averageMonthlyTransCategories = 'growing' | 'established' | 'matured';
@@ -15,11 +17,13 @@ export class BusinessInfoComponent implements OnInit {
   @Input() countries: any[] = [];
 
   averageMonthlyTransCategory!: averageMonthlyTransCategories;
+  isTaglistLoading: boolean = false;
   avatarImage: string = '';
-  companyTypes = ['Partnership', 'Corporation'];
+  
+  companyTypes = ["Sole Proprietorship", "Partnership", "Limited Liability", "Corporation", "Private Company", " Holding Company", "Joint-stock Company", "Statutory corporation", "Small Business", "Foreign corporation", "Subsidiary", "Investment company"];
   productTags = ['Vouchers', 'Agents'];
 
-  constructor(public wizardService: WizardService) {}
+  constructor(public wizardService: WizardService, private http: HttpClient) {}
 
   ngOnInit() {
     if (this.form.get("averageMonthlyTransValue")?.value) {
@@ -29,6 +33,7 @@ export class BusinessInfoComponent implements OnInit {
       const uploadedFile = this.form.get("logo")?.value;
       this.avatarImage = URL.createObjectURL(uploadedFile);
     }
+    this.fetchTags();
   }
 
   setAverageMonthlyTrans(category: averageMonthlyTransCategories) {
@@ -91,5 +96,28 @@ export class BusinessInfoComponent implements OnInit {
     this.form.addControl("date_of_incorporation", new FormControl(null, Validators.required));
 
     this.form.updateValueAndValidity();
+  }
+
+  fetchTags() {
+    this.isTaglistLoading = true;
+    try {
+      const url = `${environment.MERCHANT_CATALOGUE_API_URL}/tags?type=merchants`;
+      const headers = new HttpHeaders({
+        "Content-Type": "application/json",
+        "x-api-key": `${environment.MERCHANT_CATALOGUE_API_KEY}`
+      });
+
+      return this.http.get(url, { headers }).subscribe({
+        next: (res: any) => {
+          this.productTags = res.data;
+        },
+        error: () => {},
+      });
+    } catch (e: any) {
+      console.error("Error:", e);
+      return e;
+    } finally {
+      this.isTaglistLoading = false;
+    }
   }
 }
