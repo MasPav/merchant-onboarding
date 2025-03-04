@@ -18,11 +18,15 @@ export class FormDocumentsComponent implements OnInit {
 
   ngOnInit() {
     if(this.form.value.uploaded_documents){
-      this.uploadedFiles = this.form.value.uploaded_documents;
-    this.uploadedFiles = this.uploadedFiles.reduce((acc: { [x: string]: { name: any; url: any; }; }, file: { category: string | number; name: any; url: any; }) => {
-      acc[file.category] = { name: file.name, url: file.url };
-      return acc;
-  }, {} as { [key: string]: { name: string; url: string } });
+      const files = this.form.value.uploaded_documents;
+      this.uploadedFiles = files.reduce((acc: { [key: string]: { name: string; url: string; categoryValue: string } }, file: { category_name: string; file_name: string; url: string; category: string }) => {
+        acc[file.category_name] = { 
+          name: file.file_name, 
+          url: file.url,
+          categoryValue: file.category
+        };
+        return acc;
+      }, {} as { [key: string]: { name: string; url: string; categoryValue: string } });
     }
   }
 
@@ -67,10 +71,10 @@ export class FormDocumentsComponent implements OnInit {
 
     saveAllFiles() {
     const filesArray = Object.entries(this.uploadedFiles).map(([category, fileData]: [string, any]) => ({
-      name: fileData.name,
+      file_name: fileData.name,
       url: fileData.url,
-      category: category,
-      category_value: fileData.categoryValue
+      category_name: category,
+      category: fileData.categoryValue
     }));
     this.form.get('uploaded_documents')?.setValue(filesArray);
   }
