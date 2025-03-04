@@ -52,6 +52,9 @@
             <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Categories', value: businessInfo.categories }"></ng-container>
             <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Digital Address', value: businessInfo.digital_address }"></ng-container>
             <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Postal Address', value: businessInfo.postal_address || 'N/A' }"></ng-container>
+            <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'TIN', value: businessInfo.tin || 'N/A' }"></ng-container>
+            <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Registration No.', value: businessInfo.registration_number || 'N/A' }"></ng-container>
+            <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Date of incorporation', value: businessInfo.date_of_incorporation || 'N/A', type: 'date' }"></ng-container>
         </div>
     </div>
   
@@ -97,10 +100,18 @@
             <p class="text-slate-400">{{ title }}</p>
         </div>
     </ng-template>
-    <ng-template #infoTemplate let-title="title" let-value="value" let-colourClass="colourClass">
+    <ng-template #infoTemplate let-title="title" let-value="value" let-type="type" let-colourClass="colourClass">
         <div>
             <span class="text-sm text-gray-500">{{ title }}</span> <br>
-            <span [ngClass]="colourClass">{{ value }}</span>
+            <span [ngClass]="colourClass">
+                <ng-container *ngIf="type == 'date'">
+                    {{formatDate(value)}}
+                </ng-container>
+                <ng-container *ngIf="type != 'date'">
+                    {{value}}
+                </ng-container>
+                
+            </span>
         </div>
     </ng-template>
 </div>

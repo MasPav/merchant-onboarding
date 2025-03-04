@@ -4,6 +4,7 @@
 </div>
 
 <form [formGroup]="form">
+
   <h6 class="text-lg">What is the approximate average monthly value of all transactions processed by your business?
   </h6>
   <p class="text-slate-400">This information helps us understand the scale of your business and tailor our services
@@ -144,21 +145,25 @@
               [controlName]="'registration_number'" [group]="form"></form-input>
             <small class="text-gold"
               *ngIf="getFormControl('registration_number').dirty && getFormControl('registration_number').touched && getFormControl('registration_number').invalid && getFormControl('registration_number').hasError('required')">Registration
-              number is required</small>
+              No. is required</small>
           </div>
           <div>
             <form-input [type]="'text'" [label]="'TIN'" [placeholder]="'...'" [controlName]="'tin'"
               [group]="form"></form-input>
             <small class="text-gold"
-              *ngIf="getFormControl('tin').dirty && getFormControl('tin').touched && getFormControl('tin').invalid && getFormControl('tin').hasError('required')">Tin
-              number is required</small>
+              *ngIf="getFormControl('tin').dirty && getFormControl('tin').touched && getFormControl('tin').invalid && getFormControl('tin').hasError('required')">TIN
+              is required</small>
           </div>
           <div>
-            <form-input [type]="'date'" [label]="'Date of Incorporation'" [placeholder]="'...'"
-              [controlName]="'date_of_incorporation'" [group]="form"></form-input>
-            <small class="text-gold"
+            <label class="block">
+              <span class="block font-medium text-slate-700">Date of Incorporation <span
+                class="text-gold">*</span>
+              </span>
+              <pikaday-picker [controlName]="'date_of_incorporation'" [group]="form" [placeholder]="'YYYY-MM-DD'"></pikaday-picker>
+              <small class="text-gold"
               *ngIf="getFormControl('date_of_incorporation').dirty && getFormControl('date_of_incorporation').touched && getFormControl('date_of_incorporation').invalid && getFormControl('date_of_incorporation').hasError('required')">Date
               of incorporation is required</small>
+            </label>
           </div>
         </ng-container>
       </div>
