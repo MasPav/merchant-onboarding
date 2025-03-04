@@ -40,4 +40,12 @@ export class PreviewComponent implements OnInit {
     event.preventDefault();
     this.router.navigate(["/privacy-policy"]);
   }
+
+  formatDate(date: string) {
+    const newDate = new Date(date);
+    const month = newDate.toLocaleDateString('default', {month: 'short'});
+    const day = newDate.getDate().toString().padStart(2, '0')
+    const year = newDate.getFullYear();
+    return `${month} ${day}, ${year}`;
+  }
 }

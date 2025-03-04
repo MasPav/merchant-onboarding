@@ -1,4 +1,5 @@
 @import url('./app/core/css/ng-select.css');
+@import 'node_modules/pikaday/css/pikaday.css';
 
 @tailwind base;
 @tailwind components;

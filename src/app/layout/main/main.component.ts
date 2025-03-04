@@ -39,10 +39,7 @@ export class MainComponent implements OnInit {
         company_type: new FormControl(null, [Validators.required]),
         categories: new FormControl(null, [Validators.required]),
         digital_address: new FormControl(null, [Validators.required]),
-        postal_address: new FormControl(null, []),
-        registration_number: new FormControl(null, []),
-        tin: new FormControl(null, []),
-        date_of_incorporation: new FormControl(null, []),
+        postal_address: new FormControl(null, [])
 
       }),
       documents: new FormGroup({
