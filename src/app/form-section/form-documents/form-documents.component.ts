@@ -12,13 +12,17 @@ export class FormDocumentsComponent implements OnInit {
   @Input() form!: FormGroup;
   documentCategories = { 'ghana_card': 'Ghana Card of All Company Directors (Foreigners can provide their passports)', 'regulator_licence': 'Licence From Regulator (where applicable)', 'operation_licence': 'Licence To Operate Product (where applicable)', 'ownership_structure': 'Ownership structure and documentation such as the Shareholders Register (where applicable)'};
   selectedCategory: any = null;
-  uploadedFiles: { [key: string]: { name: string; url: string } } = {};
+  uploadedFiles: { [key: string]: { name: string; url: string } } | any = {};
   fileValidationTriggered: boolean = false;
   constructor(public wizardService: WizardService) { }
 
   ngOnInit() {
     if(this.form.value.uploaded_documents){
       this.uploadedFiles = this.form.value.uploaded_documents;
+    this.uploadedFiles = this.uploadedFiles.reduce((acc: { [x: string]: { name: any; url: any; }; }, file: { category: string | number; name: any; url: any; }) => {
+      acc[file.category] = { name: file.name, url: file.url };
+      return acc;
+  }, {} as { [key: string]: { name: string; url: string } });
     }
   }
 
@@ -58,19 +62,13 @@ export class FormDocumentsComponent implements OnInit {
   removeFile(categoryKey: string) {
     delete this.uploadedFiles[categoryKey];
   }
-  
-  saveAllFiles() {
-    const filesArray = Object.entries(this.uploadedFiles).map(([category, fileData]) => ({
-      category,
-      file: fileData
+
+    saveAllFiles() {
+    const filesArray = Object.entries(this.uploadedFiles).map(([category, fileData]: [string, any]) => ({
+      name: fileData.name,
+      url: fileData.url,
+      category: category
     }));
-    const uploadedDocs: any = {};
-    filesArray.forEach(item => {
-      uploadedDocs[item.category] = {
-        name: item.file.name,
-        url: item.file.url
-      };
-    });
-    this.form.get('uploaded_documents')?.setValue(uploadedDocs);
+    this.form.get('uploaded_documents')?.setValue(filesArray);
   }
 }
