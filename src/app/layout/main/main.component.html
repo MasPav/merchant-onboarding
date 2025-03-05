@@ -1,35 +1,69 @@
-<div class="p-10">
-  <div class="grid grid-cols-5 gap-4">
-    <button type="button" class="text-left" *ngFor="let section of wizardService.sections; let i = index"
-      (click)="wizardService.navToSection(i)">
-      <div class="card"
-        [ngClass]="{'bg-gradient-primary-to-accent text-white' : !section?.hidden, 'bg-slate-200 text-gray-400': (!section.completed && section.hidden), 'border border-success-500': section.completed}">
-        <div class="flex justify-between">
-          <div>
-            <span class="rounded-full border px-2 py-0.5"
-              [ngClass]="{'border-gray-400': (!section.completed && section.hidden)}">{{i + 1}}</span>
-            <span class="ml-2">{{section.title}}</span>
+<div class="p-10" [ngClass]="{ 'h-full flex items-center justify-center': isRequestSuccessful }">
+  <ng-container *ngIf="!isRequestSuccessful">
+    <div class="grid grid-cols-5 gap-4">
+      <button type="button" class="text-left" *ngFor="let section of wizardService.sections; let i = index"
+        (click)="wizardService.navToSection(i)">
+        <div class="card"
+          [ngClass]="{'bg-gradient-primary-to-accent text-white' : !section?.hidden, 'bg-slate-200 text-gray-400': (!section.completed && section.hidden), 'border border-success-500': section.completed}">
+          <div class="flex justify-between">
+            <div>
+              <span class="rounded-full border px-2 py-0.5"
+                [ngClass]="{'border-gray-400': (!section.completed && section.hidden)}">{{i + 1}}</span>
+              <span class="ml-2">{{section.title}}</span>
+            </div>
+            <div *ngIf="section.completed">
+              <i-feather name="check-circle" class="text-success-500 align-bottom"></i-feather>
+            </div>
           </div>
-          <div *ngIf="section.completed">
-            <i-feather name="check-circle" class="text-success-500 align-bottom"></i-feather>
+        </div>
+      </button>
+    </div>
+    <br>
+    <div class="card pt-10 pb-20">
+      <ng-container *ngIf="wizardService.selectedSection.title == 'Basic Info'">
+        <app-basic-info [form]="getFormGroup('basicInfo')" [countries]="countries"></app-basic-info>
+      </ng-container>
+      <ng-container *ngIf="wizardService.selectedSection.title == 'Business Info'">
+        <app-business-info [form]="getFormGroup('businessInfo')" [countries]="countries"></app-business-info>
+      </ng-container>
+      <ng-container *ngIf="wizardService.selectedSection.title == 'Documents'">
+        <app-form-documents [form]="getFormGroup('documents')"></app-form-documents>
+      </ng-container>
+      <ng-container *ngIf="wizardService.selectedSection.title == 'Preview'">
+        <app-preview [form]="form" [countries]="countries" (requestStatus)="onRequestStatus($event)"></app-preview>
+      </ng-container>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="isRequestSuccessful">
+    <div class="card flex items-center gap-x-10">
+      <div class="p-4 flex items-center gap-4">
+        <div class="w-28 h-28 border rounded-full">
+          <img 
+            *ngIf="avatarImage" 
+            [src]="avatarImage" 
+            alt="Business Logo" 
+            class="w-full h-full rounded-full shadow-md object-cover"
+          >
+        </div>
+        <div class="flex flex-col gap-2">
+          <h2 class="text-xl">{{ form.get("businessInfo")?.value?.business_name }}</h2>
+          <div class="flex items-center gap-2.5">
+            <span class="px-3 py-1 rounded-full text-green-600 bg-green-100 text-sm font-medium">{{ form.get("businessInfo")?.value?.country_of_operation }}</span> 
+            <span class="px-3 py-1 rounded-full text-purple-600 bg-purple-100 text-sm font-medium">{{ form.get("businessInfo")?.value?.company_type }}</span>
           </div>
         </div>
       </div>
-    </button>
-  </div>
-  <br>
-  <div class="card pt-10 pb-20">
-    <ng-container *ngIf="wizardService.selectedSection.title == 'Basic Info'">
-      <app-basic-info [form]="getFormGroup('basicInfo')" [countries]="countries"></app-basic-info>
-    </ng-container>
-    <ng-container *ngIf="wizardService.selectedSection.title == 'Business Info'">
-      <app-business-info [form]="getFormGroup('businessInfo')" [countries]="countries"></app-business-info>
-    </ng-container>
-    <ng-container *ngIf="wizardService.selectedSection.title == 'Documents'">
-      <app-form-documents [form]="getFormGroup('documents')"></app-form-documents>
-    </ng-container>
-    <ng-container *ngIf="wizardService.selectedSection.title == 'Preview'">
-      <app-preview [form]="form" [countries]="countries"></app-preview>
-    </ng-container>
-  </div>
+      <div class="w-px h-28 bg-gray-200"></div>
+      <div class="flex flex-col items-center justify-center">
+        <video #gifVideo width="150" height="auto" autoplay>
+          <source src="../../../assets/videos/correct.mp4" type="video/mp4">
+        </video>
+        <div class="flex flex-col items-center text-center gap-2.5">
+          <h2 class="text-2xl">Success!</h2>
+          <p class="w-3/4 text-sm text-gray-400">Your merchant onboarding request has been submitted successfully! Check your email for the next steps to get started.</p>
+        </div>
+      </div>
+    </div>
+  </ng-container>
 </div>

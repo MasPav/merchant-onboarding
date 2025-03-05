@@ -1,7 +1,7 @@
 import { Router } from "@angular/router";
 import { FormGroup } from "@angular/forms";
-import { Component, Input, OnInit } from "@angular/core";
 import { WizardService } from "src/app/core/wizard.service";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 
 @Component({
   selector: 'app-preview',
@@ -11,6 +11,7 @@ import { WizardService } from "src/app/core/wizard.service";
 export class PreviewComponent implements OnInit {
   @Input() form!: FormGroup;
   @Input() countries: any[] = [];
+  @Output() requestStatus: EventEmitter<any> = new EventEmitter();
 
   basicInfo: any;
   documents: any;
@@ -85,6 +86,7 @@ export class PreviewComponent implements OnInit {
         },
       ],
     };
+    this.requestStatus.emit("successful");
   }
 
   formatDate(date: string) {

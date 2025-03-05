@@ -20,6 +20,9 @@ export class MainComponent implements OnInit {
   form: FormGroup;
   countries: Country[] = [];
 
+  avatarImage: string = "";
+  isRequestSuccessful: boolean = false;
+
   constructor(public wizardService: WizardService, private http: HttpClient) {
     this.form = new FormGroup({
       basicInfo: new FormGroup({
@@ -63,5 +66,19 @@ export class MainComponent implements OnInit {
           this.countries = res;
         }
       })
+  }
+
+  onRequestStatus(status: string) {
+    const businessInfo = this.form.get("businessInfo")?.value || {};
+    if (businessInfo.logo) {
+      const uploadedFile = businessInfo.logo;
+      this.avatarImage = URL.createObjectURL(uploadedFile);
+    }
+    
+    if (status === "successful") {
+      this.isRequestSuccessful = true;
+    } else {
+      this.isRequestSuccessful = false;
+    }
   }
 }
