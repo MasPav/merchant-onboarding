@@ -19,6 +19,17 @@
       </button>
     </div>
     <br>
+    <ng-container *ngIf="requestFailed">
+      <div class="relative card bg-red-50 flex items-center gap-2.5 text-red-600 border border-red-600 rounded-md">
+        <i-feather name="alert-circle"></i-feather>
+        <p role="button" (click)="requestFailed = !requestFailed" class="absolute top-2 right-3 text-red-600">×</p>
+        <div>
+          <h2 class="text-sm font-medium">Sorry, something went wrong!</h2>
+          <p class="text-xs text-slate-600">We were unable to process your request at this time. Please try again later or contact support for assistance.</p>
+        </div>
+      </div>
+      <br />
+    </ng-container>
     <div class="card pt-10 pb-20">
       <ng-container *ngIf="wizardService.selectedSection.title == 'Basic Info'">
         <app-basic-info [form]="getFormGroup('basicInfo')" [countries]="countries"></app-basic-info>

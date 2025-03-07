@@ -21,6 +21,7 @@ export class MainComponent implements OnInit {
   countries: Country[] = [];
 
   avatarImage: string = "";
+  requestFailed: boolean = false;
   isRequestSuccessful: boolean = false;
 
   constructor(public wizardService: WizardService, private http: HttpClient) {
@@ -78,6 +79,7 @@ export class MainComponent implements OnInit {
     if (status === "successful") {
       this.isRequestSuccessful = true;
     } else {
+      this.requestFailed = true;
       this.isRequestSuccessful = false;
     }
   }
