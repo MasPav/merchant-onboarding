@@ -1,4 +1,4 @@
-<div class="p-10" [ngClass]="{ 'h-full flex items-center justify-center': isRequestSuccessful }">
+<div *ngIf="paramValue" class="p-10" [ngClass]="{ 'h-full flex items-center justify-center': isRequestSuccessful }">
   <ng-container *ngIf="!isRequestSuccessful">
     <div class="grid grid-cols-5 gap-4">
       <button type="button" class="text-left" *ngFor="let section of wizardService.sections; let i = index"
@@ -25,7 +25,7 @@
         <p role="button" (click)="requestFailed = !requestFailed" class="absolute top-2 right-3 text-red-600">×</p>
         <div>
           <h2 class="text-sm font-medium">Sorry, something went wrong!</h2>
-          <p class="text-xs text-slate-600">We were unable to process your request at this time. Please try again later or contact support for assistance.</p>
+          <p class="text-xs text-slate-600">{{ errorMessage ? errorMessage : "We were unable to process your request at this time. Please try again later or contact support for assistance."}}</p>
         </div>
       </div>
       <br />
@@ -77,4 +77,14 @@
       </div>
     </div>
   </ng-container>
+</div>
+
+<div *ngIf="!paramValue" class="h-full flex flex-col items-center justify-center gap-6">
+  <i-feather name="info"></i-feather>
+  <i-feather name="alert-triangle" class="text-red-600" style="width: 48px; height: 48px;"></i-feather>
+  <div class="text-center">
+    <p class="text-2xl">Oops! Something is missing.</p>
+    <small>The requested product is absent from the URL. Please verify the link's accuracy and try again.</small>
+  </div>
+  <button (click)="goBackHome()" class="bg-primary py-2 px-4 text-sm text-white rounded-md">Go Back</button>
 </div>

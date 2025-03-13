@@ -27,9 +27,17 @@ export const environment = {
    APP_NAME: "${process.env["APP_NAME"]}",
    API_URL: "${process.env["API_URL"]}",
    LOCAL_STORAGE_KEY: "${process.env['LOCAL_STORAGE_KEY']}",
+   MERCHANT_ID: "${process.env['MERCHANT_ID']}",
+   TRANSFLOW_ID: "${process.env['TRANSFLOW_ID']}",
+   MERCHANT_PRODUCT_ID: "${process.env['MERCHANT_PRODUCT_ID']}",
    MERCHANT_CATALOGUE_API_URL: "${process.env['MERCHANT_CATALOGUE_API_URL']}",
    MERCHANT_CATALOGUE_API_KEY: "${process.env['MERCHANT_CATALOGUE_API_KEY']}",
-   MERCHANT_ONBOARDING_API_URL: "${process.env['MERCHANT_ONBOARDING_API_URL']}"
+   MERCHANT_ONBOARDING_API_URL: "${process.env['MERCHANT_ONBOARDING_API_URL']}",
+   MERCHANT_ONBOARDING_API_KEY: "${process.env['MERCHANT_ONBOARDING_API_KEY']}",
+   MERCHANT_ONBOARDING_S3_URL: "${process.env['MERCHANT_ONBOARDING_S3_URL']}",
+   AWS_ACCESS_KEY: "${process.env['AWS_ACCESS_KEY']}",
+   AWS_SECRET: "${process.env['AWS_SECRET']}",
+   AWS_REGION: "${process.env['AWS_REGION']}",
 };
 `;
 // write the content to the respective file

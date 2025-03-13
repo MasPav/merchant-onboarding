@@ -1,0 +1,11 @@
+{
+    "/api/*": {
+        "target": "https://apisuat.itcsrvc.com",
+        "secure": false,
+        "changeOrigin": true,
+        "logLevel": "debug",
+        "pathRewrite": {
+            "^/api/(.*)": "/merchant-onboarding/source/$1/merchant/request"
+        }
+    }
+}
