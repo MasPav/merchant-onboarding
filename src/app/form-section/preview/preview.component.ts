@@ -150,84 +150,15 @@ export class PreviewComponent implements OnInit {
         ],
         callbackUrl: this.basicInfo.email
       };
-
-      const dummyPayload = {
-        "merchantData": [
-            {
-                "companyName": "Technology Solutions",
-                "tradeName": "TechSol",
-                "alias": "ITCM",
-                "country": "GH",
-                "code": "GH",
-                "companyLogo": "blob:http://localhost:53381/1759205c-3da4-4c0f-a588-cc21a211c842",
-                "typeOfCompany": "Partnership",
-                "companyCategories": [
-                    "voucher"
-                ],
-                "companyRegistrationNumber": "CS360712025",
-                "vatRegistrationNumber": "C0001234567",
-                "dateOfIncorporation": "2025-03-01",
-                "dateOfCommencement": "2025-03-07",
-                "taxIdentificationNumber": "TIN0012345678",
-                "basicInfo": {
-                    "surname": "Doe",
-                    "otherNames": "TechSol",
-                    "email": "doe.john@gmail.com",
-                    "phoneNumber": "+233240000000"
-                },
-                "contacts": [
-                    {
-                        "contactTypeId": "43cd2673-6238-46ae-a62d-69d6ba608728",
-                        "email": "doe.john@gmail.com",
-                        "phone": "+233240000000"
-                    }
-                ],
-                "officeAddress": [
-                    {
-                        "officeAddress": "22-000-9090",
-                        "officeOwnership": "owned",
-                        "officeAddressDuration": "5 years",
-                        "officePostalAddress": "",
-                        "businessType": "Partnership",
-                        "officeCity": "East Legon",
-                        "officeRegion": "GA001",
-                        "officePhone": "233 302123456",
-                        "officeMobile": "233 302123456",
-                        "officeDistrict": "AWMD3167"
-                    }
-                ],
-                "documents": [
-                    {
-                        "code": "ghana_card",
-                        "url": "https://merchant-onboarding-app.s3.eu-west-1.amazonaws.com/Documents/certification.pdf"
-                    },
-                    {
-                        "code": "operation_license",
-                        "url": "https://merchant-onboarding-app.s3.eu-west-1.amazonaws.com/Documents/certification.pdf"
-                    },
-                    {
-                        "code": "ownership_structure",
-                        "url": "https://merchant-onboarding-app.s3.eu-west-1.amazonaws.com/Documents/certification.pdf"
-                    },
-                    {
-                        "code": "regulator_license",
-                        "url": "https://merchant-onboarding-app.s3.eu-west-1.amazonaws.com/Documents/certification.pdf"
-                    }
-                ]
-            }
-        ],
-        "callbackUrl": "doe.john@gmail.com"
-      };
       
       const headers = new HttpHeaders({
         "Content-Type": "application/json",
         "transflowId": environment.TRANSFLOW_ID,
         "apiKey": environment.MERCHANT_ONBOARDING_API_KEY,
         "merchantProductId": environment.MERCHANT_PRODUCT_ID,
-        "Access-Control-Allow-Origin": "*",
       });
       
-      this.http.post<any>(`${environment.MERCHANT_ONBOARDING_API_URL}/source/${superMerchantId}/merchant/request`, JSON.stringify(dummyPayload), { headers }).subscribe({
+      this.http.post<any>(`${environment.MERCHANT_ONBOARDING_API_URL}/source/${superMerchantId}/merchant/request`, JSON.stringify(payload), { headers }).subscribe({
         next: (res: any) => {
           this.requestStatus.emit(res);
         }

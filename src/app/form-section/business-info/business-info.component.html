@@ -138,6 +138,10 @@
         <div [ngClass]="{'col-span-full': averageMonthlyTransCategory != 'matured'}">
           <form-input [type]="'text'" [label]="'Postal Address'" [placeholder]="'Postal Address'"
             [controlName]="'postal_address'" [group]="form"></form-input>
+          <small 
+            class="text-red-600"
+            *ngIf="getFormControl('postal_address').dirty && getFormControl('postal_address').touched && getFormControl('postal_address').invalid && getFormControl('postal_address').hasError('required')"
+          >Postal address is required</small>
         </div>
         <ng-container *ngIf="averageMonthlyTransCategory == 'matured'">
           <div>
