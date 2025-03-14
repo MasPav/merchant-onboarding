@@ -10,7 +10,23 @@ export class FormDocumentsComponent implements OnInit {
 
   @ViewChild('fileUploader') fileUploader!: ElementRef;
   @Input() form!: FormGroup;
-  documentCategories = { 'ghana_card': 'Ghana Card of All Company Directors (Foreigners can provide their passports)', 'regulator_license': 'Licence From Regulator (where applicable)', 'operation_license': 'License To Operate Product (where applicable)', 'ownership_structure': 'Ownership structure and documentation such as the Shareholders Register (where applicable)'};
+  
+  documentCategories = {
+    "ghana_card": "Ghana Card of All Company Directors (Foreigners can provide their passports)",
+    "operation_license": "License To Operate Product (where applicable)",
+    "product_service_description": "Product/service description document",
+    "tin_number": "Tax Identification Number (TIN)",
+    "business_registration": "Business Registration Documents (Certificate to commence business and incorporation or Certificate of Registration)",
+    "directors_identification": "Ghana Card of all company directors. Foreigners can provide their passport",
+    "ownership_structure": "Ownership structure and documentation such as the Shareholders Register (where applicable)",
+    "regulator_license": "Licence From Regulator (where applicable)",
+    "product_description": "License to operate product (not compulsory)",
+    "aml_fraud_policy": "AML/Fraud Policy Document",
+    "data_protection_certificate": "Data Protection Certificate",
+    "vulnerability_test_report": "Vulnerability and Penetration Test Report (not compulsory)",
+    "due_diligence": "Due Diligence Form (not compulsory)"
+  };
+
   selectedCategory: any = null;
   uploadedFiles: { [key: string]: { name: string; url: string } } | any = {};
   fileValidationTriggered: boolean = false;
@@ -28,6 +44,7 @@ export class FormDocumentsComponent implements OnInit {
         return acc;
       }, {} as { [key: string]: { name: string; url: string; categoryValue: string } });
     }
+    console.log(this.form.value)
   }
 
   onSelectCategory(category: any) {

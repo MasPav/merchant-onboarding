@@ -86,6 +86,15 @@ export class PreviewComponent implements OnInit {
 
       const superMerchantId = environment.MERCHANT_ID;
       const formattedDocuments = await Promise.all(uploadPromises);
+
+      const encodedDocuments = formattedDocuments.map((doc) => {
+        try {
+          const encodedUrl = encodeURI(doc.url);
+          return { ...doc, url: encodedUrl };
+        } catch (error) {
+          return { ...doc, encodedUrl: null };
+        }
+      });
       
       const payload = {
         merchantData: [
@@ -145,7 +154,7 @@ export class PreviewComponent implements OnInit {
                 officeDistrict: "AWMD3167",
               },
             ],
-            documents: formattedDocuments,
+            documents: encodedDocuments,
           },
         ],
         callbackUrl: this.basicInfo.email
