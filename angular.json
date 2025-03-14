@@ -28,15 +28,16 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": ["fast-xml-parser", "bowser", "pikaday"]
           },
           "configurations": {
             "production": {
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "1.5mb",
+                  "maximumError": "2mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -63,13 +64,13 @@
 							"budgets": [
 								{
 									"type": "initial",
-									"maximumWarning": "5mb",
-									"maximumError": "5mb"
+									"maximumWarning": "1.5mb",
+									"maximumError": "1.5mb"
 								},
 								{
 									"type": "anyComponentStyle",
-									"maximumWarning": "5mb",
-									"maximumError": "5mb"
+									"maximumWarning": "2kb",
+									"maximumError": "4kb"
 								}
 							]
 						},
