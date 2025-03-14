@@ -10,7 +10,7 @@ export class FormDocumentsComponent implements OnInit {
 
   @ViewChild('fileUploader') fileUploader!: ElementRef;
   @Input() form!: FormGroup;
-  documentCategories = { 'ghana_card': 'Ghana Card of All Company Directors (Foreigners can provide their passports)', 'regulator_licence': 'Licence From Regulator (where applicable)', 'operation_licence': 'Licence To Operate Product (where applicable)', 'ownership_structure': 'Ownership structure and documentation such as the Shareholders Register (where applicable)'};
+  documentCategories = { 'ghana_card': 'Ghana Card of All Company Directors (Foreigners can provide their passports)', 'regulator_license': 'Licence From Regulator (where applicable)', 'operation_license': 'License To Operate Product (where applicable)', 'ownership_structure': 'Ownership structure and documentation such as the Shareholders Register (where applicable)'};
   selectedCategory: any = null;
   uploadedFiles: { [key: string]: { name: string; url: string } } | any = {};
   fileValidationTriggered: boolean = false;

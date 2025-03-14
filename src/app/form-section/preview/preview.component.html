@@ -87,12 +87,15 @@
     </div>
 
     <br>
-    <div class="text-right">
-        <button class="btn border border-primary shadow-none mr-5" (click)="wizardService.moveToPrevSection()">
+    <div class="flex items-center gap-5 justify-end">
+        <button class="btn border border-primary shadow-none" (click)="wizardService.moveToPrevSection()">
             Back
         </button>
-        <button (click)="onSubmitForm()" class="btn bg-gradient-primary-to-accent text-white">
+        <button (click)="onSubmitForm()" [disabled]="isSubmittingForm" [ngClass]="{ 'flex items-center gap-1.5': isSubmittingForm }" class="btn bg-gradient-primary-to-accent text-white">
             Submit
+            <ng-container *ngIf="isSubmittingForm">
+                <i-feather name="loader" class="size-5 text-white animate-spin"></i-feather>
+            </ng-container>
         </button>
     </div>
 

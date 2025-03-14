@@ -1,7 +1,9 @@
+import { Location } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { WizardService } from 'src/app/core/wizard.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 export interface Country {
   "name": string;
@@ -20,10 +22,13 @@ export class MainComponent implements OnInit {
   form: FormGroup;
   countries: Country[] = [];
 
+  paramValue: string = "";
   avatarImage: string = "";
+  errorMessage: string = "";
+  requestFailed: boolean = false;
   isRequestSuccessful: boolean = false;
 
-  constructor(public wizardService: WizardService, private http: HttpClient) {
+  constructor(public wizardService: WizardService, private http: HttpClient, private router: Router, private route: ActivatedRoute, private location: Location) {
     this.form = new FormGroup({
       basicInfo: new FormGroup({
         surname: new FormControl('', [Validators.required]),
@@ -57,6 +62,16 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      if (!params["product"]) {
+        this.router.navigate([], {
+          queryParams: { product: "Uniwallet Integration" },
+          queryParamsHandling: "merge"
+        });
+      } else {
+        this.paramValue = params["product"];
+      }
+    });
   }
 
   getCountries() {
@@ -68,17 +83,25 @@ export class MainComponent implements OnInit {
       })
   }
 
-  onRequestStatus(status: string) {
+  onRequestStatus(status: any) {
     const businessInfo = this.form.get("businessInfo")?.value || {};
     if (businessInfo.logo) {
       const uploadedFile = businessInfo.logo;
       this.avatarImage = URL.createObjectURL(uploadedFile);
     }
     
-    if (status === "successful") {
+    if (status?.responseCode == "200") {
       this.isRequestSuccessful = true;
     } else {
+      this.requestFailed = true;
       this.isRequestSuccessful = false;
+      this.errorMessage = status?.data?.message;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      console.error("Error: ", status?.responseMessage);
     }
+  }
+
+  goBackHome() {
+    this.location.back();
   }
 }

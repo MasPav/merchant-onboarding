@@ -22,6 +22,8 @@
     "@angular/platform-browser": "^16.2.0",
     "@angular/platform-browser-dynamic": "^16.2.0",
     "@angular/router": "^16.2.0",
+    "@aws-sdk/client-s3": "^3.758.0",
+    "@aws-sdk/lib-storage": "^3.758.0",
     "@ng-select/ng-select": "^11.2.0",
     "angular-feather": "^6.5.1",
     "pikaday": "^1.8.2",

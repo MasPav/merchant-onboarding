@@ -33,6 +33,16 @@ export class BusinessInfoComponent implements OnInit {
       const uploadedFile = this.form.get("logo")?.value;
       this.avatarImage = URL.createObjectURL(uploadedFile);
     }
+    this.form.get("country_of_operation")?.valueChanges.subscribe((selectedCountry) => {
+      const country = this.countries.find((c) => c.name === selectedCountry);
+      if (country) {
+        if (!this.form.contains("country_code")) {
+          this.form.addControl("country_code", new FormControl(country.code));
+        } else {
+          this.form.get("country_code")?.setValue(country.code);
+        }
+      }
+    });
     this.fetchTags();
   }
 
