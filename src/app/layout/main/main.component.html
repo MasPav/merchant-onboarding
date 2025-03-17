@@ -39,7 +39,7 @@
         <app-business-info [form]="getFormGroup('businessInfo')" [countries]="countries"></app-business-info>
       </ng-container>
       <ng-container *ngIf="wizardService.selectedSection.title == 'Documents'">
-        <app-form-documents [form]="getFormGroup('documents')"></app-form-documents>
+        <app-form-documents [form]="getFormGroup('documents')" [averageMonthlyTransValue]="form.get('businessInfo.averageMonthlyTransValue')?.value"></app-form-documents>
       </ng-container>
       <ng-container *ngIf="wizardService.selectedSection.title == 'Preview'">
         <app-preview [form]="form" [countries]="countries" (requestStatus)="onRequestStatus($event)"></app-preview>

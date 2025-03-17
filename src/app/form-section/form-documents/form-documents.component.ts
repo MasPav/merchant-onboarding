@@ -1,6 +1,7 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { DocumentKey, TransactionValue } from 'src/app/core/types';
 import { WizardService } from 'src/app/core/wizard.service';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-form-documents',
   templateUrl: './form-documents.component.html',
@@ -9,9 +10,10 @@ import { WizardService } from 'src/app/core/wizard.service';
 export class FormDocumentsComponent implements OnInit {
 
   @ViewChild('fileUploader') fileUploader!: ElementRef;
+  @Input() averageMonthlyTransValue!: TransactionValue;
   @Input() form!: FormGroup;
   
-  documentCategories = {
+  documentCategories: Record<DocumentKey, string> = {
     "ghana_card": "Ghana Card of All Company Directors (Foreigners can provide their passports)",
     "operation_license": "License To Operate Product (where applicable)",
     "product_service_description": "Product/service description document",
@@ -27,12 +29,26 @@ export class FormDocumentsComponent implements OnInit {
     "due_diligence": "Due Diligence Form (not compulsory)"
   };
 
+  documentRequirements: Record<TransactionValue, DocumentKey[]>  = {
+    growing: ["ghana_card", "operation_license", "product_service_description"],
+    established: ["ghana_card", "operation_license", "tin_number", "product_service_description"],
+    matured: [
+      "business_registration", "directors_identification", "ownership_structure", "regulator_license",
+      "operation_license", "product_description", "aml_fraud_policy", "data_protection_certificate",
+      "vulnerability_test_report", "due_diligence"
+    ]
+  };
+
   selectedCategory: any = null;
-  uploadedFiles: { [key: string]: { name: string; url: string } } | any = {};
   fileValidationTriggered: boolean = false;
+  filteredDocuments: { key: string, value: string }[] = [];
+  uploadedFiles: { [key: string]: { name: string; url: string } } | any = {};
+
   constructor(public wizardService: WizardService) { }
 
   ngOnInit() {
+    this.filterDocumentsByTransactionValue();
+
     if(this.form.value.uploaded_documents){
       const files = this.form.value.uploaded_documents;
       this.uploadedFiles = files.reduce((acc: { [key: string]: { name: string; url: string; categoryValue: string } }, file: { category_name: string; file_name: string; url: string; category: string }) => {
@@ -44,23 +60,42 @@ export class FormDocumentsComponent implements OnInit {
         return acc;
       }, {} as { [key: string]: { name: string; url: string; categoryValue: string } });
     }
-    console.log(this.form.value)
   }
 
+  filterDocumentsByTransactionValue() {
+    if (!this.averageMonthlyTransValue || !(this.averageMonthlyTransValue in this.documentRequirements)) {
+      return;
+    }
+    const transactionValue = this.averageMonthlyTransValue;
+    const requiredKeys = new Set(this.documentRequirements[transactionValue]);
+
+    this.filteredDocuments = this.documentRequirements[transactionValue].map(key => ({
+      key,
+      value: this.documentCategories[key]
+    }));
+    
+    if (this.wizardService.lastTransactionValue !== transactionValue) {
+      Object.keys(this.uploadedFiles).forEach(key => {
+        if (!requiredKeys.has(key as DocumentKey)) {
+          delete this.uploadedFiles[key];
+        }
+      });
+      
+      this.saveAllFiles();
+      this.wizardService.lastTransactionValue = transactionValue;
+    }
+  }
+  
   onSelectCategory(category: any) {
     this.selectedCategory = category;
   }
   
   isNextDisabled(): boolean {
-    const totalCategories = Object.keys(this.documentCategories).length;
-    const uploadedFilesCount = Object.keys(this.uploadedFiles).length;
-    return uploadedFilesCount < totalCategories;
+    return Object.keys(this.uploadedFiles).length < this.filteredDocuments.length;
   }
 
   onNavNext() {
-    const totalCategories = Object.keys(this.documentCategories).length;
-    const uploadedFilesCount = Object.keys(this.uploadedFiles).length;
-    if (uploadedFilesCount < totalCategories) {
+    if (this.isNextDisabled()) {
       this.fileValidationTriggered = true;
     } else {
       this.saveAllFiles();
@@ -86,7 +121,7 @@ export class FormDocumentsComponent implements OnInit {
     delete this.uploadedFiles[categoryKey];
   }
 
-    saveAllFiles() {
+  saveAllFiles() {
     const filesArray = Object.entries(this.uploadedFiles).map(([category, fileData]: [string, any]) => ({
       file_name: fileData.name,
       url: fileData.url,

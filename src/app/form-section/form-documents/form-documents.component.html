@@ -4,7 +4,7 @@
 </div>
 
 <form [formGroup]="form">
-    <ng-container *ngFor="let category of documentCategories | keyvalue">
+    <ng-container *ngFor="let category of filteredDocuments">
       <div class="card border mb-3 p-3">
         <div class="flex justify-between items-center">
           <div class="flex items-center">
@@ -26,12 +26,13 @@
               <input type="file" name="fileUploader" accept=".pdf" hidden #fileUploader (change)="onFileSelected($event, category)">
               Upload
             </button>
-            <span *ngIf="uploadedFiles[category.key]"><i-feather (click)="removeFile(category.key)" name="Trash2" class="cursor-pointer text-red-500"></i-feather></span>
+            <span *ngIf="uploadedFiles[category.key]">
+              <i-feather (click)="removeFile(category.key)" name="Trash2" class="cursor-pointer text-red-500"></i-feather>
+            </span>
           </div>
         </div>
       </div>
     </ng-container>
-    
     <br>
     <div class="text-right">
       <button class="btn border border-primary shadow-none mr-5" (click)="wizardService.moveToPrevSection()">

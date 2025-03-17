@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { TransactionValue } from './types';
 
 interface Section {
   title: string;
@@ -12,7 +13,7 @@ interface Section {
 export class WizardService {
 
   sections: Section[] = [];
-
+  lastTransactionValue: TransactionValue | null = null;
 
   constructor() {
     this.sections = [
