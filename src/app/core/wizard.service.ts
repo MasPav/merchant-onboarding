@@ -13,7 +13,6 @@ interface Section {
 export class WizardService {
 
   sections: Section[] = [];
-  lastTransactionValue: TransactionValue | null = null;
 
   constructor() {
     this.sections = [

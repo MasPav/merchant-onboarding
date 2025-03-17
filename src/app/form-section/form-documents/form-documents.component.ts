@@ -2,6 +2,8 @@ import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { DocumentKey, TransactionValue } from 'src/app/core/types';
 import { WizardService } from 'src/app/core/wizard.service';
 import { FormGroup } from '@angular/forms';
+
+interface AvailableCategory { code: string, description: string }
 @Component({
   selector: 'app-form-documents',
   templateUrl: './form-documents.component.html',
@@ -12,7 +14,7 @@ export class FormDocumentsComponent implements OnInit {
   @ViewChild('fileUploader') fileUploader!: ElementRef;
   @Input() averageMonthlyTransValue!: TransactionValue;
   @Input() form!: FormGroup;
-  
+
   documentCategories: Record<DocumentKey, string> = {
     "ghana_card": "Ghana Card of All Company Directors (Foreigners can provide their passports)",
     "operation_license": "License To Operate Product (where applicable)",
@@ -29,7 +31,7 @@ export class FormDocumentsComponent implements OnInit {
     "due_diligence": "Due Diligence Form (not compulsory)"
   };
 
-  documentRequirements: Record<TransactionValue, DocumentKey[]>  = {
+  documentRequirements: Record<TransactionValue, DocumentKey[]> = {
     growing: ["ghana_card", "operation_license", "product_service_description"],
     established: ["ghana_card", "operation_license", "tin_number", "product_service_description"],
     matured: [
@@ -41,78 +43,56 @@ export class FormDocumentsComponent implements OnInit {
 
   selectedCategory: any = null;
   fileValidationTriggered: boolean = false;
-  filteredDocuments: { key: string, value: string }[] = [];
-  uploadedFiles: { [key: string]: { name: string; url: string } } | any = {};
+  availableCategories: AvailableCategory[] = [];
+  uploadedFiles: { [key: string]: { name: string; url: string } } | any = null;
 
   constructor(public wizardService: WizardService) { }
 
   ngOnInit() {
+    this.uploadedFiles = this.form.value.uploaded_documents;
     this.filterDocumentsByTransactionValue();
 
-    if(this.form.value.uploaded_documents){
-      const files = this.form.value.uploaded_documents;
-      this.uploadedFiles = files.reduce((acc: { [key: string]: { name: string; url: string; categoryValue: string } }, file: { category_name: string; file_name: string; url: string; category: string }) => {
-        acc[file.category_name] = { 
-          name: file.file_name, 
-          url: file.url,
-          categoryValue: file.category
-        };
-        return acc;
-      }, {} as { [key: string]: { name: string; url: string; categoryValue: string } });
-    }
   }
 
   filterDocumentsByTransactionValue() {
-    if (!this.averageMonthlyTransValue || !(this.averageMonthlyTransValue in this.documentRequirements)) {
-      return;
-    }
-    const transactionValue = this.averageMonthlyTransValue;
-    const requiredKeys = new Set(this.documentRequirements[transactionValue]);
 
-    this.filteredDocuments = this.documentRequirements[transactionValue].map(key => ({
-      key,
-      value: this.documentCategories[key]
+    console.log(this.uploadedFiles);
+    this.availableCategories = this.documentRequirements[this.averageMonthlyTransValue].map(key => ({
+      code: key,
+      description: this.documentCategories[key]
+
     }));
-    
-    if (this.wizardService.lastTransactionValue !== transactionValue) {
-      Object.keys(this.uploadedFiles).forEach(key => {
-        if (!requiredKeys.has(key as DocumentKey)) {
-          delete this.uploadedFiles[key];
-        }
-      });
-      
-      this.saveAllFiles();
-      this.wizardService.lastTransactionValue = transactionValue;
-    }
+    this.setUploadedDocs();
   }
-  
+
   onSelectCategory(category: any) {
     this.selectedCategory = category;
   }
-  
+
   isNextDisabled(): boolean {
-    return Object.keys(this.uploadedFiles).length < this.filteredDocuments.length;
+    return Object.keys(this.uploadedFiles).length < this.availableCategories.length;
   }
 
   onNavNext() {
     if (this.isNextDisabled()) {
       this.fileValidationTriggered = true;
     } else {
-      this.saveAllFiles();
+      this.setUploadedDocs();
       this.wizardService.markSectionAsCompleted(this.wizardService.selectedSection);
       this.wizardService.moveToNextSection();
     }
   }
 
-  onFileSelected(event: Event, category: {key: any, value:any}) {
-    const categoryKey = category.key
+  onFileSelected(event: Event, category: AvailableCategory) {
+    const categoryKey = category.code
     const fileInput = event.target as HTMLInputElement;
     if (fileInput.files && fileInput.files.length > 0) {
       const file = fileInput.files[0];
+      !this.uploadedFiles ? this.uploadedFiles = {} : '';
       this.uploadedFiles[categoryKey] = {
         name: file.name,
         url: URL.createObjectURL(file),
-        categoryValue: category.value
+        categoryValue: category.description
       };
     }
   }
@@ -121,13 +101,7 @@ export class FormDocumentsComponent implements OnInit {
     delete this.uploadedFiles[categoryKey];
   }
 
-  saveAllFiles() {
-    const filesArray = Object.entries(this.uploadedFiles).map(([category, fileData]: [string, any]) => ({
-      file_name: fileData.name,
-      url: fileData.url,
-      category_name: category,
-      category: fileData.categoryValue
-    }));
-    this.form.get('uploaded_documents')?.setValue(filesArray);
+  setUploadedDocs() {
+    this.form.get('uploaded_documents')?.setValue(this.uploadedFiles);
   }
 }

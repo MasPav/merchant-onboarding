@@ -4,7 +4,7 @@
 </div>
 
 <form [formGroup]="form">
-    <ng-container *ngFor="let category of filteredDocuments">
+    <ng-container *ngFor="let category of availableCategories">
       <div class="card border mb-3 p-3">
         <div class="flex justify-between items-center">
           <div class="flex items-center">
@@ -12,22 +12,22 @@
               <img src="assets/images/pdf.png" alt="PDF Icon" style="width: 30px;" class="object-cover">
             </div>
             <div>
-              <p class="text-sm leading-3">{{ category.value }}</p>
-              <small class="text-accent mt-0" *ngIf="uploadedFiles[category.key]">
-                {{ uploadedFiles[category.key].name }}
+              <p class="text-sm leading-3">{{ category.description }}</p>
+              <small class="text-accent mt-0" *ngIf="uploadedFiles?.[category.code]">
+                {{ uploadedFiles?.[category.code].name }}
               </small>
-              <small class="text-red-600 mt-0" *ngIf="fileValidationTriggered && !uploadedFiles[category.key]">
+              <small class="text-red-600 mt-0" *ngIf="fileValidationTriggered && !uploadedFiles?.[category.code]">
                 You forgot to upload a file
               </small>
             </div>
           </div>
           <div>
-            <button *ngIf="!uploadedFiles[category.key]" (click)="fileUploader.click()" class="btn border border-primary shadow-none px-3 py-1 text-sm me-2">
+            <button *ngIf="!uploadedFiles?.[category.code]" (click)="fileUploader.click()" class="btn border border-primary shadow-none px-3 py-1 text-sm me-2">
               <input type="file" name="fileUploader" accept=".pdf" hidden #fileUploader (change)="onFileSelected($event, category)">
               Upload
             </button>
-            <span *ngIf="uploadedFiles[category.key]">
-              <i-feather (click)="removeFile(category.key)" name="Trash2" class="cursor-pointer text-red-500"></i-feather>
+            <span *ngIf="uploadedFiles?.[category.code]">
+              <i-feather (click)="removeFile(category.code)" name="Trash2" class="cursor-pointer text-red-500"></i-feather>
             </span>
           </div>
         </div>
