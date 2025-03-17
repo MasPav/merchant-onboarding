@@ -22,7 +22,7 @@ export class MainComponent implements OnInit {
   form: FormGroup;
   countries: Country[] = [];
 
-  paramValue: string = "";
+  product: string = "";
   avatarImage: string = "";
   errorMessage: string = "";
   requestFailed: boolean = false;
@@ -62,14 +62,7 @@ export class MainComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
-      if (!params["product"]) {
-        this.router.navigate([], {
-          queryParams: { product: "Uniwallet Integration" },
-          queryParamsHandling: "merge"
-        });
-      } else {
-        this.paramValue = params["product"];
-      }
+      this.product = params["product"];
     });
   }
 

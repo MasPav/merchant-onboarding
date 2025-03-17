@@ -1,5 +1,6 @@
-<div *ngIf="paramValue" class="p-10" [ngClass]="{ 'h-full flex items-center justify-center': isRequestSuccessful }">
+<div *ngIf="product" class="p-10" [ngClass]="{ 'h-full flex items-center justify-center': isRequestSuccessful }">
   <ng-container *ngIf="!isRequestSuccessful">
+    <h1 class="text-3xl text-primary mb-10 uppercase font-medium">{{product}}</h1>
     <div class="grid grid-cols-5 gap-4">
       <button type="button" class="text-left" *ngFor="let section of wizardService.sections; let i = index"
         (click)="wizardService.navToSection(i)">
@@ -79,7 +80,7 @@
   </ng-container>
 </div>
 
-<div *ngIf="!paramValue" class="h-full flex flex-col items-center justify-center gap-6">
+<div *ngIf="!product" class="h-full flex flex-col items-center justify-center gap-6">
   <i-feather name="info"></i-feather>
   <i-feather name="alert-triangle" class="text-red-600" style="width: 48px; height: 48px;"></i-feather>
   <div class="text-center">
