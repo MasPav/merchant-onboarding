@@ -19,7 +19,6 @@ export class FormDocumentsComponent implements OnInit {
     "ghana_card": "Ghana Card of All Company Directors (Foreigners can provide their passports)",
     "operation_license": "License To Operate Product (where applicable)",
     "product_service_description": "Product/service description document",
-    "tin_number": "Tax Identification Number (TIN)",
     "business_registration": "Business Registration Documents (Certificate to commence business and incorporation or Certificate of Registration)",
     "directors_identification": "Ghana Card of all company directors. Foreigners can provide their passport",
     "ownership_structure": "Ownership structure and documentation such as the Shareholders Register (where applicable)",
@@ -33,7 +32,7 @@ export class FormDocumentsComponent implements OnInit {
 
   documentRequirements: Record<TransactionValue, DocumentKey[]> = {
     growing: ["ghana_card", "operation_license", "product_service_description"],
-    established: ["ghana_card", "operation_license", "tin_number", "product_service_description"],
+    established: ["ghana_card", "operation_license", "product_service_description"],
     matured: [
       "business_registration", "directors_identification", "ownership_structure", "regulator_license",
       "operation_license", "product_description", "aml_fraud_policy", "data_protection_certificate",

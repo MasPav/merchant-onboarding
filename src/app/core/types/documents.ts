@@ -4,7 +4,6 @@ export type DocumentKey =
   | "ghana_card"
   | "operation_license"
   | "product_service_description"
-  | "tin_number"
   | "business_registration"
   | "directors_identification"
   | "ownership_structure"

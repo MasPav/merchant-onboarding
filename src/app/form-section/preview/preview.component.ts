@@ -26,7 +26,7 @@ export class PreviewComponent implements OnInit {
   isChecked: boolean = false;
   submitted: boolean = false;
   isSubmittingForm: boolean = false;
-  documentsArray: { category: any; file_name: any; url: any; }[] = [];
+  documentsArray: { code: string; category: any; file_name: any; url: any; }[] = [];
 
   constructor(public wizardService: WizardService, private router: Router, private http: HttpClient) {
     this.s3Client = new S3Client({
@@ -52,7 +52,8 @@ export class PreviewComponent implements OnInit {
     this.documentsArray = Object.keys(this.documents).map(key => ({
       category: this.documents[key].categoryValue,
       file_name: this.documents[key].name,
-      url: this.documents[key].url
+      url: this.documents[key].url,
+      code: key
     }));
     
     if (this.businessInfo.logo) {
@@ -76,9 +77,9 @@ export class PreviewComponent implements OnInit {
     try {
       this.isSubmittingForm = true;
       const s3Documents = await Promise.all(
-        uploadedDocs.map(async (doc: { url: string; file_name: string; category: any; }) => {
+        uploadedDocs.map(async (doc: { url: string; file_name: string; code: any; }) => {
           const file = await this.convertBlobUrlToFile(doc.url, doc.file_name);
-          return { code: doc.category, file: file };
+          return { code: doc.code, file: file };
         })
       );
       
@@ -109,17 +110,11 @@ export class PreviewComponent implements OnInit {
           {
             companyName: this.businessInfo.business_name || "",
             tradeName: this.businessInfo.trade_name || "",
-            alias: "ITCM",
             country: this.businessInfo.country_code,
             code: this.businessInfo.country_code,
             companyLogo: this.businessInfo.logo ? URL.createObjectURL(this.businessInfo.logo) : "",
             typeOfCompany: this.businessInfo.company_type || "",
             companyCategories: [this.businessInfo.categories.name],
-            companyRegistrationNumber: "CS360712025",
-            vatRegistrationNumber: "C0001234567",
-            dateOfIncorporation: "2025-03-01",
-            dateOfCommencement: "2025-03-07",
-            taxIdentificationNumber: "TIN0012345678",
             basicInfo: {
               surname: this.basicInfo.surname,
               otherNames: this.businessInfo.trade_name || "",
@@ -151,8 +146,6 @@ export class PreviewComponent implements OnInit {
             officeAddress: [
               {
                 officeAddress: this.businessInfo.digital_address || "",
-                officeOwnership: "owned",
-                officeAddressDuration: "5 years",
                 officePostalAddress: this.businessInfo.postal_address || "",
                 businessType: this.businessInfo.company_type || "",
                 officeCity: "East Legon",
@@ -175,11 +168,8 @@ export class PreviewComponent implements OnInit {
         "merchantProductId": environment.MERCHANT_PRODUCT_ID,
       });
       
-      this.http.post<any>(`${environment.MERCHANT_ONBOARDING_API_URL}/source/${superMerchantId}/merchant/request`, JSON.stringify(payload), { headers }).subscribe({
-        next: (res: any) => {
-          this.requestStatus.emit(res);
-        }
-      });
+      const response = await this.http.post<any>(`${environment.MERCHANT_ONBOARDING_API_URL}/source/${superMerchantId}/merchant/request`, JSON.stringify(payload), { headers }).toPromise();
+      this.requestStatus.emit(response);
     } catch (error) {
       console.error("Error in Form Submission:", error);
     } finally {
