@@ -26,6 +26,7 @@ export class PreviewComponent implements OnInit {
   isChecked: boolean = false;
   submitted: boolean = false;
   isSubmittingForm: boolean = false;
+  documentsArray: { category: any; file_name: any; url: any; }[] = [];
 
   constructor(public wizardService: WizardService, private router: Router, private http: HttpClient) {
     this.s3Client = new S3Client({
@@ -47,6 +48,13 @@ export class PreviewComponent implements OnInit {
     this.basicInfo = this.form.get("basicInfo")?.value || {};
     this.businessInfo = this.form.get("businessInfo")?.value || {};
     this.documents = this.form.get("documents.uploaded_documents")?.value || {};
+
+    this.documentsArray = Object.keys(this.documents).map(key => ({
+      category: this.documents[key].categoryValue,
+      file_name: this.documents[key].name,
+      url: this.documents[key].url
+    }));
+    
     if (this.businessInfo.logo) {
       const uploadedFile = this.businessInfo.logo;
       this.avatarImage = URL.createObjectURL(uploadedFile);
@@ -62,15 +70,15 @@ export class PreviewComponent implements OnInit {
     this.submitted = true;
     if (!this.isChecked) return;
     
-    const uploadedDocs = this.documents || [];
+    const uploadedDocs = this.documentsArray || [];
     const s3_base_url = environment.MERCHANT_ONBOARDING_S3_URL;
     
     try {
       this.isSubmittingForm = true;
       const s3Documents = await Promise.all(
-        uploadedDocs.map(async (doc: { url: string; file_name: string; category_name: any; }) => {
+        uploadedDocs.map(async (doc: { url: string; file_name: string; category: any; }) => {
           const file = await this.convertBlobUrlToFile(doc.url, doc.file_name);
-          return { code: doc.category_name, file: file };
+          return { code: doc.category, file: file };
         })
       );
       

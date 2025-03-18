@@ -51,16 +51,12 @@ export class FormDocumentsComponent implements OnInit {
   ngOnInit() {
     this.uploadedFiles = this.form.value.uploaded_documents;
     this.filterDocumentsByTransactionValue();
-
   }
 
   filterDocumentsByTransactionValue() {
-
-    console.log(this.uploadedFiles);
     this.availableCategories = this.documentRequirements[this.averageMonthlyTransValue].map(key => ({
       code: key,
       description: this.documentCategories[key]
-
     }));
     this.setUploadedDocs();
   }
@@ -102,6 +98,17 @@ export class FormDocumentsComponent implements OnInit {
   }
 
   setUploadedDocs() {
+    if (!this.uploadedFiles) {
+      this.uploadedFiles = {};
+    }
+
+    const validKeys = new Set(this.availableCategories.map(category => category.code));
+    const filteredFiles = Object.fromEntries(
+      Object.entries(this.uploadedFiles).filter(([key]) => validKeys.has(key))
+    );
+    this.uploadedFiles = filteredFiles;
+    
     this.form.get('uploaded_documents')?.setValue(this.uploadedFiles);
+    this.form.get('uploaded_documents')?.updateValueAndValidity();
   }
 }
