@@ -48,7 +48,7 @@ export class PreviewComponent implements OnInit {
     this.basicInfo = this.form.get("basicInfo")?.value || {};
     this.businessInfo = this.form.get("businessInfo")?.value || {};
     this.documents = this.form.get("documents.uploaded_documents")?.value || {};
-
+    
     this.documentsArray = Object.keys(this.documents).map(key => ({
       category: this.documents[key].categoryValue,
       file_name: this.documents[key].name,
@@ -65,6 +65,10 @@ export class PreviewComponent implements OnInit {
   navigateToPrivacyPolicy(event: Event) {
     event.preventDefault();
     this.router.navigate(["/privacy-policy"]);
+  }
+
+  getTier(value: string): number {
+    return value === "growing" ? 1 : value === "established" ? 2 : value === "matured" ? 3 : 0;
   }
 
   async onSubmitForm() {
@@ -115,6 +119,7 @@ export class PreviewComponent implements OnInit {
             companyLogo: this.businessInfo.logo ? URL.createObjectURL(this.businessInfo.logo) : "",
             typeOfCompany: this.businessInfo.company_type || "",
             companyCategories: [this.businessInfo.categories.name],
+            tier: this.getTier(this.businessInfo.averageMonthlyTransValue),
             basicInfo: {
               surname: this.basicInfo.surname,
               otherNames: this.businessInfo.trade_name || "",
@@ -143,18 +148,7 @@ export class PreviewComponent implements OnInit {
                   ]
                 : []),
             ],
-            officeAddress: [
-              {
-                officeAddress: this.businessInfo.digital_address || "",
-                officePostalAddress: this.businessInfo.postal_address || "",
-                businessType: this.businessInfo.company_type || "",
-                officeCity: "East Legon",
-                officeRegion: "GA001",
-                officePhone: "233 302123456",
-                officeMobile: "233 302123456",
-                officeDistrict: "AWMD3167",
-              },
-            ],
+            taxIdentificationNumber: this.businessInfo.tin,
             documents: encodedDocuments,
           },
         ],

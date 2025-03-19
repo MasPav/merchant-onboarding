@@ -135,7 +135,7 @@
             *ngIf="getFormControl('categories').dirty && getFormControl('categories').touched && getFormControl('categories').invalid && getFormControl('categories').hasError('required')">Category
             is required</small>
         </div>
-        <div [ngClass]="{'col-span-full': averageMonthlyTransCategory != 'matured'}">
+        <div [ngClass]="{'col-span-full': averageMonthlyTransCategory == 'growing'}">
           <form-input [type]="'text'" [label]="'Postal Address'" [placeholder]="'Postal Address'"
             [controlName]="'postal_address'" [group]="form"></form-input>
           <small 
@@ -152,13 +152,6 @@
               No. is required</small>
           </div>
           <div>
-            <form-input [type]="'text'" [label]="'TIN'" [placeholder]="'...'" [controlName]="'tin'"
-              [group]="form"></form-input>
-            <small class="text-red-600"
-              *ngIf="getFormControl('tin').dirty && getFormControl('tin').touched && getFormControl('tin').invalid && getFormControl('tin').hasError('required')">TIN
-              is required</small>
-          </div>
-          <div>
             <label class="block">
               <span class="block font-medium text-slate-700">Date of Incorporation <span
                 class="text-red-600">*</span>
@@ -168,6 +161,19 @@
               *ngIf="getFormControl('date_of_incorporation').dirty && getFormControl('date_of_incorporation').touched && getFormControl('date_of_incorporation').invalid && getFormControl('date_of_incorporation').hasError('required')">Date
               of incorporation is required</small>
             </label>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="averageMonthlyTransCategory != 'growing'">
+          <div>
+            <form-input 
+              [type]="'text'" [label]="'TIN'" [placeholder]="'...'" [controlName]="'tin'" [group]="form"
+            ></form-input>
+            <small 
+              class="text-red-600"
+              *ngIf="getFormControl('tin').dirty && getFormControl('tin').touched && getFormControl('tin').invalid && getFormControl('tin').hasError('required')"
+            >
+              TIN is required
+            </small>
           </div>
         </ng-container>
       </div>

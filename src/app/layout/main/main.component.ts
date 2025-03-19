@@ -1,9 +1,9 @@
 import { Location } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WizardService } from 'src/app/core/wizard.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 export interface Country {
   "name": string;
@@ -18,6 +18,7 @@ export interface Country {
   styleUrls: ['./main.component.css']
 })
 export class MainComponent implements OnInit {
+  @ViewChild("topSection") topSection!: ElementRef;
 
   form: FormGroup;
   countries: Country[] = [];
@@ -88,8 +89,8 @@ export class MainComponent implements OnInit {
       this.requestFailed = true;
       this.isRequestSuccessful = false;
       this.errorMessage = status?.data?.message;
-      window.scrollTo({ top: 0, behavior: 'smooth' });
       console.error("Error: ", status?.responseMessage);
+      this.topSection.nativeElement.scrollIntoView({ behavior: "smooth" });
     }
   }
 

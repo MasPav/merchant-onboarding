@@ -48,15 +48,20 @@ export class BusinessInfoComponent implements OnInit {
 
   setAverageMonthlyTrans(category: averageMonthlyTransCategories) {
     this.averageMonthlyTransCategory = category;
+    const tinValue = this.form.get("tin")?.value;
     this.form.patchValue({averageMonthlyTransValue: category});
 
+    this.form.removeControl("tin");
+    this.form.removeControl("registration_number");
+    this.form.removeControl("date_of_incorporation");
+
     if (category === "matured") {
-      this.addControls();
-    } else {
-      this.form.removeControl("tin");
-      this.form.removeControl("registration_number");
-      this.form.removeControl("date_of_incorporation");
+      this.addControls(tinValue);
+    } else if (category === "established") {
+      this.form.addControl("tin", new FormControl(tinValue || null, Validators.required));
     }
+
+    this.form.get("tin")?.updateValueAndValidity();
 
     Object.keys(this.form.controls).forEach((key) => {
       const control = this.form.get(key);
@@ -100,8 +105,8 @@ export class BusinessInfoComponent implements OnInit {
     }
   }
 
-  private addControls() {
-    this.form.addControl("tin", new FormControl(null, Validators.required));
+  private addControls(tinValue?: any) {
+    this.form.addControl("tin", new FormControl(tinValue || null, Validators.required));
     this.form.addControl("registration_number", new FormControl(null, Validators.required));
     this.form.addControl("date_of_incorporation", new FormControl(null, Validators.required));
 
