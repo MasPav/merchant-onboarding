@@ -25,7 +25,6 @@ export const environment = {
    production: ${environment === 'prod'},
    environment: "${environment}",
    APP_NAME: "${process.env["APP_NAME"]}",
-   API_URL: "${process.env["API_URL"]}",
    LOCAL_STORAGE_KEY: "${process.env['LOCAL_STORAGE_KEY']}",
    MERCHANT_ID: "${process.env['MERCHANT_ID']}",
    TRANSFLOW_ID: "${process.env['TRANSFLOW_ID']}",
