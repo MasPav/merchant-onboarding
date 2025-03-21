@@ -35,9 +35,9 @@ export const environment = {
    MERCHANT_ONBOARDING_API_URL: "${process.env['MERCHANT_ONBOARDING_API_URL']}",
    MERCHANT_ONBOARDING_API_KEY: "${process.env['MERCHANT_ONBOARDING_API_KEY']}",
    MERCHANT_ONBOARDING_S3_URL: "${process.env['MERCHANT_ONBOARDING_S3_URL']}",
-   AWS_ACCESS_KEY: "${process.env['AWS_ACCESS_KEY']}",
-   AWS_SECRET: "${process.env['AWS_SECRET']}",
-   AWS_REGION: "${process.env['AWS_REGION']}",
+   AWS_ACCESS_KEY: "${process.env['ACCESS_KEY']}",
+   AWS_SECRET: "${process.env['ACCESS_SECRET']}",
+   AWS_REGION: "${process.env['REGION']}",
 };
 `;
 // write the content to the respective file
