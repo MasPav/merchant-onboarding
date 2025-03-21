@@ -48,34 +48,10 @@
   </ng-container>
 
   <ng-container *ngIf="isRequestSuccessful">
-    <div class="card flex items-center gap-x-10">
-      <div class="p-4 flex items-center gap-4">
-        <div class="w-28 h-28 border rounded-full">
-          <img 
-            *ngIf="avatarImage" 
-            [src]="avatarImage" 
-            alt="Business Logo" 
-            class="w-full h-full rounded-full shadow-md object-cover"
-          >
-        </div>
-        <div class="flex flex-col gap-2">
-          <h2 class="text-xl">{{ form.get("businessInfo")?.value?.business_name }}</h2>
-          <div class="flex flex-wrap lg:flex-nowrap items-center gap-2.5">
-            <span class="px-3 py-1 rounded-full text-green-600 bg-green-100 text-sm font-medium">{{ form.get("businessInfo")?.value?.country_of_operation }}</span> 
-            <span class="px-3 py-1 rounded-full text-purple-600 bg-purple-100 text-sm font-medium">{{ form.get("businessInfo")?.value?.company_type }}</span>
-          </div>
-        </div>
-      </div>
-      <div class="w-px h-28 bg-gray-200"></div>
-      <div class="flex flex-col items-center justify-center">
-        <video #gifVideo width="150" height="auto" autoplay>
-          <source src="../../../assets/videos/correct.mp4" type="video/mp4">
-        </video>
-        <div class="flex flex-col items-center text-center gap-2.5">
-          <h2 class="text-2xl">Submission Successful! 🚀</h2>
-          <p class="w-3/4 text-sm text-gray-400">We've received your request and are excited to get you started. We will be in contact to guide you through the next steps.</p>
-        </div>
-      </div>
+    <div class="text-center">
+      <i-feather name="check-circle" class="text-success-500" style="width: 80px; height: 80px;"></i-feather>
+      <h2 class="text-3xl my-2">Submission Successful! 🚀</h2>
+      <p class="text-gray-500">We've received your request and are excited to get you started. We will be in contact to guide you through the next steps.</p>
     </div>
   </ng-container>
 </div>
