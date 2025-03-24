@@ -23,7 +23,7 @@
           </div>
           <div>
             <button *ngIf="!uploadedFiles?.[category.code]" (click)="fileUploader.click()" class="btn border border-primary shadow-none px-3 py-1 text-sm me-2">
-              <input type="file" name="fileUploader" accept=".pdf" hidden #fileUploader (change)="onFileSelected($event, category)">
+              <input type="file" name="fileUploader" accept=".pdf,image/*" hidden #fileUploader (change)="onFileSelected($event, category)">
               Upload
             </button>
             <span *ngIf="uploadedFiles?.[category.code]">

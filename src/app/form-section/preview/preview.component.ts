@@ -26,6 +26,7 @@ export class PreviewComponent implements OnInit {
   isChecked: boolean = false;
   submitted: boolean = false;
   isSubmittingForm: boolean = false;
+  selectedCategories: string[] = [];
   documentsArray: { code: string; category: any; file_name: any; url: any; }[] = [];
 
   constructor(public wizardService: WizardService, private router: Router, private http: HttpClient) {
@@ -59,6 +60,9 @@ export class PreviewComponent implements OnInit {
     if (this.businessInfo.logo) {
       const uploadedFile = this.businessInfo.logo;
       this.avatarImage = URL.createObjectURL(uploadedFile);
+    }
+    if (this.businessInfo.categories?.length) {
+      this.selectedCategories = this.businessInfo.categories.map((c: { label: string; }) => c.label).join(", ");
     }
   }
 
@@ -118,7 +122,7 @@ export class PreviewComponent implements OnInit {
             code: this.businessInfo.country_code,
             companyLogo: this.businessInfo.logo ? URL.createObjectURL(this.businessInfo.logo) : "",
             typeOfCompany: this.businessInfo.company_type || "",
-            companyCategories: [this.businessInfo.categories.name],
+            companyCategories: this.businessInfo.categories.map((c: any) => c.name) || [],
             tier: this.getTier(this.businessInfo.averageMonthlyTransValue),
             basicInfo: {
               surname: this.basicInfo.surname,

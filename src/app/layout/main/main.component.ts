@@ -43,7 +43,7 @@ export class MainComponent implements OnInit {
         averageMonthlyTransValue: new FormControl('', [Validators.required]),
         logo: new FormControl('', [Validators.required]),
         business_name: new FormControl('', [Validators.required]),
-        trade_name: new FormControl('', [Validators.required]),
+        trade_name: new FormControl('', []),
         country_of_operation: new FormControl(null, [Validators.required]),
         company_type: new FormControl(null, [Validators.required]),
         categories: new FormControl(null, [Validators.required]),

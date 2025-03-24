@@ -49,7 +49,7 @@
             <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Trade Name', value: businessInfo.trade_name }"></ng-container>
             <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Country of Operation', value: businessInfo.country_of_operation }"></ng-container>
             <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Company Type', value: businessInfo.company_type }"></ng-container>
-            <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Categories', value: businessInfo.categories.label }"></ng-container>
+            <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Categories', value: selectedCategories || '--' }"></ng-container>
             <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Digital Address', value: businessInfo.digital_address }"></ng-container>
             <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Postal Address', value: businessInfo.postal_address || 'N/A' }"></ng-container>
             <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'TIN', value: businessInfo.tin || 'N/A' }"></ng-container>

@@ -13,24 +13,24 @@
   <div class="grid grid-cols-3 gap-4">
     <button type="button" class="text-left" (click)="setAverageMonthlyTrans('growing')">
       <div class="card shadow-none border flex items-center hover:shadow-md"
-        [ngClass]="{'border-gold': averageMonthlyTransCategory == 'growing'}">
-        <div>
-          <i-feather name="trending-up" class="text-gold"></i-feather>
+        [ngClass]="{'border-accent': averageMonthlyTransCategory == 'growing'}">
+        <div class="p-2 bg-blue-50 flex items-center justify-center border border-blue-100 rounded-full">
+          <i-feather name="trending-up" class="text-accent"></i-feather>
         </div>
         <div class="ml-4">
-          <p class="text-lg text-gold">Growing</p>
+          <p class="text-lg text-accent">Growing</p>
           <p>Under <b>GHS 5,000</b></p>
         </div>
       </div>
     </button>
     <button type="button" class="text-left" (click)="setAverageMonthlyTrans('established')">
       <div class="card shadow-none border flex items-center hover:shadow-md"
-        [ngClass]="{'border-gold': averageMonthlyTransCategory == 'established'}">
-        <div>
-          <i-feather name="award" class="text-gold"></i-feather>
+        [ngClass]="{'border-accent': averageMonthlyTransCategory == 'established'}">
+        <div class="p-2 bg-blue-50 flex items-center justify-center border border-blue-100 rounded-full">
+          <i-feather name="award" class="text-accent"></i-feather>
         </div>
         <div class="ml-4">
-          <p class="text-lg text-gold">Established</p>
+          <p class="text-lg text-accent">Established</p>
           <p> <b>GHS 5,000</b> - <b>GHS 15,000</b> </p>
         </div>
       </div>
@@ -38,12 +38,12 @@
 
     <button type="button" class="text-left" (click)="setAverageMonthlyTrans('matured')">
       <div class="card shadow-none border flex items-center hover:shadow-md"
-        [ngClass]="{'border-gold': averageMonthlyTransCategory == 'matured'}">
-        <div>
-          <i-feather name="star" class="text-gold"></i-feather>
+        [ngClass]="{'border-accent': averageMonthlyTransCategory == 'matured'}">
+        <div class="p-2 bg-blue-50 flex items-center justify-center border border-blue-100 rounded-full">
+          <i-feather name="star" class="text-accent"></i-feather>
         </div>
         <div class="ml-4">
-          <p class="text-lg text-gold">Matured</p>
+          <p class="text-lg text-accent">Matured</p>
           <p>Above <b>GHS 15,000</b></p>
         </div>
       </div>
@@ -81,11 +81,10 @@
             name is required</small>
         </div>
         <div>
-          <form-input [type]="'text'" [label]="'Trade Name'" [placeholder]="'Your Business Trade Name'"
-            [controlName]="'trade_name'" [group]="form"></form-input>
-          <small class="text-red-600"
-            *ngIf="getFormControl('trade_name').dirty && getFormControl('trade_name').touched && getFormControl('trade_name').invalid && getFormControl('trade_name').hasError('required')">Trade
-            name is required</small>
+          <form-input 
+            [type]="'text'" [label]="'Trade Name'" [placeholder]="'Your Business Trade Name'"
+            [controlName]="'trade_name'" [group]="form"
+          ></form-input>
         </div>
         <div>
           <label class="block">
@@ -129,8 +128,14 @@
             <span class="block font-medium text-slate-700">Categories<span class="text-red-600">*</span></span>
           </label>
           <ng-select [placeholder]="'Add Product Tags'" formControlName="categories" [searchable]="true"
-            [clearable]="false" [loading]="isTaglistLoading" [items]="productTags" class="mt-1">
-          </ng-select>
+            [clearable]="false" [loading]="isTaglistLoading" [items]="productTags" class="mt-1" [multiple]="true" 
+            [ngClass]="{
+              'min-h-[2rem]': true,
+              '[&_.ng-select-container]:!py-1 [&_.ng-select-container]:!min-h-[2rem]': true,
+              '[&_.ng-value-container]:!py-0 [&_.ng-value-container]:!min-h-[2rem]': true,
+              '[&_.ng-placeholder]:!top-1/2 [&_.ng-placeholder]:!-translate-y-1/2': true
+            }"
+          ></ng-select>
           <small class="text-red-600"
             *ngIf="getFormControl('categories').dirty && getFormControl('categories').touched && getFormControl('categories').invalid && getFormControl('categories').hasError('required')">Category
             is required</small>

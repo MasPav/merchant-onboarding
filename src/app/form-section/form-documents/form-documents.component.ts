@@ -17,24 +17,24 @@ export class FormDocumentsComponent implements OnInit {
 
   documentCategories: Record<DocumentKey, string> = {
     "ghana_card": "Ghana Card of All Company Directors (Foreigners can provide their passports)",
-    "operation_license": "License To Operate Product (where applicable)",
-    "product_service_description": "Product/service description document",
+    "operation_license": "Metropolitan, Municipal or District Assembly license to operate, or a tax receipt",
+    "product_service_description": "Product/Service Description Document",
     "business_registration": "Business Registration Documents (Certificate to commence business and incorporation or Certificate of Registration)",
     "directors_identification": "Ghana Card of all company directors. Foreigners can provide their passport",
     "ownership_structure": "Ownership structure and documentation such as the Shareholders Register (where applicable)",
     "regulator_license": "Licence From Regulator (where applicable)",
-    "product_description": "License to operate product (not compulsory)",
+    "product_description": "Product Description",
     "aml_fraud_policy": "AML/Fraud Policy Document",
     "data_protection_certificate": "Data Protection Certificate",
-    "vulnerability_test_report": "Vulnerability and Penetration Test Report (not compulsory)",
-    "due_diligence": "Due Diligence Form (not compulsory)"
+    "vulnerability_test_report": "Vulnerability and Penetration Test Report",
+    "due_diligence": "Due Diligence Form"
   };
 
   documentRequirements: Record<TransactionValue, DocumentKey[]> = {
     growing: ["ghana_card", "operation_license", "product_service_description"],
     established: ["ghana_card", "operation_license", "product_service_description"],
     matured: [
-      "business_registration", "directors_identification", "ownership_structure", "regulator_license",
+      "business_registration", "ghana_card", "directors_identification", "ownership_structure", "regulator_license",
       "operation_license", "product_description", "aml_fraud_policy", "data_protection_certificate",
       "vulnerability_test_report", "due_diligence"
     ]
