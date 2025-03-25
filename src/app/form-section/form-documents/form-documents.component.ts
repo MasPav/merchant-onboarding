@@ -34,7 +34,7 @@ export class FormDocumentsComponent implements OnInit {
     growing: ["ghana_card", "operation_license", "product_service_description"],
     established: ["ghana_card", "operation_license", "product_service_description"],
     matured: [
-      "business_registration", "ghana_card", "directors_identification", "ownership_structure", "operation_license",
+      "business_registration", "ghana_card", "ownership_structure", "operation_license",
       "product_description", "aml_fraud_policy", "data_protection_certificate",
       "vulnerability_test_report", "due_diligence"
     ]

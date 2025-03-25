@@ -13,7 +13,7 @@
             {{ businessInfo.business_name }}
         </h1>
         <p class="flex items-center gap-3 text-gray-600 text-sm mt-1">
-            <span class="px-3 py-1 rounded-full text-blue-600 bg-blue-100 text-sm font-medium">{{ businessInfo.trade_name }}</span> 
+            <span *ngIf="businessInfo?.trade_name" class="px-3 py-1 rounded-full text-blue-600 bg-blue-100 text-sm font-medium">{{ businessInfo.trade_name }}</span> 
             <span class="px-3 py-1 rounded-full text-green-600 bg-green-100 text-sm font-medium">{{ businessInfo.country_of_operation }}</span> 
             <span class="px-3 py-1 rounded-full text-purple-600 bg-purple-100 text-sm font-medium">{{ businessInfo.company_type }}</span>
         </p>
@@ -46,7 +46,7 @@
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Average Monthly Transaction Value', value: averageMonthlyTransMap[businessInfo.averageMonthlyTransValue] }"></ng-container>
             <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Business Name', value: businessInfo.business_name }"></ng-container>
-            <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Trade Name', value: businessInfo.trade_name }"></ng-container>
+            <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Trade Name', value: businessInfo.trade_name || '--' }"></ng-container>
             <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Country of Operation', value: businessInfo.country_of_operation }"></ng-container>
             <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Company Type', value: businessInfo.company_type }"></ng-container>
             <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Categories', value: selectedCategories || '--' }"></ng-container>

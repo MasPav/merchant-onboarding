@@ -126,7 +126,7 @@ export class PreviewComponent implements OnInit {
             tier: this.getTier(this.businessInfo.averageMonthlyTransValue),
             basicInfo: {
               surname: this.basicInfo.surname,
-              otherNames: this.businessInfo.trade_name || "",
+              otherNames: this.basicInfo.othernames,
               email: this.basicInfo.email,
               phoneNumber: `${this.basicInfo.dial_code}${this.basicInfo.msisdn}`,
             },
