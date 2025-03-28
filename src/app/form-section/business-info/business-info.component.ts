@@ -26,13 +26,20 @@ export class BusinessInfoComponent implements OnInit {
   constructor(public wizardService: WizardService, private http: HttpClient) {}
 
   ngOnInit() {
-    if (this.form.get("averageMonthlyTransValue")?.value) {
-      this.averageMonthlyTransCategory = this.form.get("averageMonthlyTransValue")?.value;
+    const control = this.form.get("averageMonthlyTransValue");
+    if (control?.value) {
+      this.averageMonthlyTransCategory = control?.value;
     }
-    if (this.form.get("logo")?.value) {
-      const uploadedFile = this.form.get("logo")?.value;
-      this.avatarImage = URL.createObjectURL(uploadedFile);
+    
+    const logo = this.form.get("logo")?.value;
+    if (logo) {
+      if (logo instanceof Blob) {
+        this.avatarImage = URL.createObjectURL(logo);
+      } else if (typeof logo === "string") {
+        this.avatarImage = logo;
+      }
     }
+
     this.form.get("country_of_operation")?.valueChanges.subscribe((selectedCountry) => {
       const country = this.countries.find((c) => c.name === selectedCountry);
       if (country) {
@@ -125,6 +132,16 @@ export class BusinessInfoComponent implements OnInit {
       return this.http.get(url, { headers }).subscribe({
         next: (res: any) => {
           this.productTags = res.data;
+
+          const rawCategories = this.form.get("categories")?.value;
+
+          if (Array.isArray(rawCategories) && typeof rawCategories[0] === "string") {
+            const normalized = rawCategories
+              .map(code => this.productTags.find((tag: any) => tag.name === code))
+              .filter(Boolean);
+
+            this.form.get("categories")?.setValue(normalized);
+          }
         },
         error: () => {},
       });
@@ -134,5 +151,9 @@ export class BusinessInfoComponent implements OnInit {
     } finally {
       this.isTaglistLoading = false;
     }
+  }
+
+  onLogoError(event: Event) {
+    (event.target as HTMLImageElement).src = "assets/images/merchant.png";
   }
 }

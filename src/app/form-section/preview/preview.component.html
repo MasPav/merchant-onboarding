@@ -5,6 +5,7 @@
                 *ngIf="avatarImage" 
                 [src]="avatarImage" 
                 alt="Business Logo" 
+                (error)="onLogoError($event)" 
                 class="w-full h-full rounded-full shadow-md object-cover"
             >
         </div>

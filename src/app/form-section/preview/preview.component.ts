@@ -57,9 +57,13 @@ export class PreviewComponent implements OnInit {
       code: key
     }));
     
-    if (this.businessInfo.logo) {
-      const uploadedFile = this.businessInfo.logo;
-      this.avatarImage = URL.createObjectURL(uploadedFile);
+    const logo = this.businessInfo.logo;
+    if (logo) {
+      if (logo instanceof Blob) {
+        this.avatarImage = URL.createObjectURL(logo);
+      } else {
+        this.avatarImage = logo;
+      }
     }
     if (this.businessInfo.categories?.length) {
       this.selectedCategories = this.businessInfo.categories.map((c: { label: string; }) => c.label).join(", ");
@@ -197,5 +201,9 @@ export class PreviewComponent implements OnInit {
       console.error("Error converting Blob URL:", error);
       throw error;
     }
+  }
+
+  onLogoError(event: Event) {
+    (event.target as HTMLImageElement).src = "assets/images/merchant.png";
   }
 }

@@ -60,7 +60,7 @@
         <div>
           <button type="button" (click)="fileUploadInput.click()"
             class="border rounded-full border-2 hover:shadow-md mb-1" [ngClass]="{ 'p-12': !avatarImage }">
-            <img *ngIf="avatarImage" [src]="avatarImage" alt="Uploaded Logo" style="width: 145px; height: 145px;"
+            <img *ngIf="avatarImage" [src]="avatarImage" alt="Uploaded Logo" (error)="onLogoError($event)" style="width: 145px; height: 145px;"
               class="rounded-full object-cover">
             <i-feather *ngIf="!avatarImage" name="image" style="width: 40px; height: 40px;"
               class="text-slate-500"></i-feather>

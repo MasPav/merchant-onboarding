@@ -96,9 +96,31 @@ export class FormDocumentsComponent implements OnInit {
     delete this.uploadedFiles[categoryKey];
   }
 
+  extractFileNameFromUrl(url: string): string {
+    return url.split("/").pop() || "document.pdf";
+  }
+
   setUploadedDocs() {
     if (!this.uploadedFiles) {
       this.uploadedFiles = {};
+    }
+
+    if (Array.isArray(this.uploadedFiles)) {
+      const formattedDocs: Record<string, any> = {};
+  
+      this.uploadedFiles.forEach((doc: any) => {
+        const categoryValue = this.documentCategories[doc.code as DocumentKey];
+  
+        if (categoryValue) {
+          formattedDocs[doc.code] = {
+            name: this.extractFileNameFromUrl(doc.url),
+            url: doc.url,
+            categoryValue
+          };
+        }
+      });
+  
+      this.uploadedFiles = formattedDocs;
     }
 
     const validKeys = new Set(this.availableCategories.map(category => category.code));

@@ -1,7 +1,8 @@
 import { Location } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
+import { environment } from "src/environments/environment";
 import { WizardService } from 'src/app/core/wizard.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
@@ -23,6 +24,7 @@ export class MainComponent implements OnInit {
   form: FormGroup;
   countries: Country[] = [];
 
+  requestId: any;
   product: string = "";
   avatarImage: string = "";
   errorMessage: string = "";
@@ -65,6 +67,7 @@ export class MainComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.product = params["product"];
     });
+    this.checkRouteParams();
   }
 
   getCountries() {
@@ -96,5 +99,79 @@ export class MainComponent implements OnInit {
 
   goBackHome() {
     this.location.back();
+  }
+
+  checkRouteParams() {
+    this.requestId = this.route.snapshot.firstChild?.paramMap.get("id");
+    
+    if (this.requestId) {
+      this.populateForm(this.requestId);
+    }
+  }
+
+  async fetchMerchantData(id: string): Promise<any> {
+    const headers = new HttpHeaders({
+      "Content-Type": "application/json",
+      "transflowId": environment.INTERNAL_TRANSFLOW_ID,
+      "apiKey": environment.INTERNAL_MERCHANT_ONBOARDING_API_KEY,
+      "merchantProductId": environment.MERCHANT_PRODUCT_ID,
+    });
+  
+    try {
+      const response = await this.http
+        .get<any>(`${environment.MERCHANT_ONBOARDING_API_URL}/request/${id}/`, { headers })
+        .toPromise();
+      
+      return response?.data;
+    } catch (error) {
+      console.error('Error fetching merchant data:', error);
+      return null;
+    }
+  }
+
+  async populateForm(id: string) {
+    const entry = await this.fetchMerchantData(id);
+    if (!entry) return;
+  
+    const merchant = entry.merchantData[0];
+    const country = this.countries.find((c: any) => c.code === merchant.code);
+    const dial_code = country?.dial_code || "+233";
+    const msisdn = merchant.basicInfo.phoneNumber.replace(dial_code, "").trim();
+  
+    const averageMap: any = {
+      1: "growing",
+      2: "established",
+      3: "matured"
+    };
+
+    const cleanedDocuments = merchant.documents.map((doc: any) => ({
+      ...doc,
+      url: decodeURIComponent(doc.url),
+    }));
+    
+    this.form.patchValue({
+      basicInfo: {
+        surname: merchant.basicInfo.surname,
+        othernames: merchant.basicInfo.otherNames,
+        email: merchant.basicInfo.email,
+        dial_code: dial_code,
+        msisdn: msisdn,
+        support_contact: false
+      },
+      businessInfo: {
+        averageMonthlyTransValue: averageMap[merchant.tier],
+        logo: merchant.companyLogo,
+        business_name: merchant.companyName,
+        trade_name: merchant.tradeName,
+        country_of_operation: country?.name || merchant.country,
+        company_type: merchant.typeOfCompany,
+        categories: merchant.companyCategories,
+        digital_address: "",
+        postal_address: ""
+      },
+      documents: {
+        uploaded_documents: cleanedDocuments
+      }
+    });
   }
 }
