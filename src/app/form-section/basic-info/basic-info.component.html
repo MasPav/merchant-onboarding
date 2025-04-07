@@ -30,11 +30,11 @@
       <small class="text-red-600" *ngIf="getFormControl('email').hasError('email')">Invalid email format</small>
     </div>
     <div>
-      <div class="flex items-end">
-        <div class="w-2/5">
-          <label class="block">
-            <span class="block font-medium text-slate-700">Phone Number<span class="text-red-600">*</span></span>
-          </label>
+      <div class="flex flex-col">
+        <label class="block">
+          <span class="block font-medium text-slate-700">Phone Number<span class="text-red-600">*</span></span>
+        </label>
+        <div class="flex items-center">
           <ng-select [placeholder]="'Select Country'" formControlName="dial_code" [searchable]="true"
             [searchable]="true" [clearable]="false" [items]="countries" bindValue="dial_code" bindLabel="name"
             class="mt-1">
@@ -48,10 +48,10 @@
               {{item.dial_code}}
             </ng-template>
           </ng-select>
-        </div>
-        <div class="w-full ml-1">
-          <form-input [type]="'text'" [label]="''" [placeholder]="'00 000 000'" [controlName]="'msisdn'"
-            [group]="form"></form-input>
+          <div class="w-full ml-1">
+            <form-input [type]="'text'" [label]="''" [placeholder]="'00 000 000'" [controlName]="'msisdn'"
+              [group]="form"></form-input>
+          </div>
         </div>
       </div>
       <small class="text-red-600"
@@ -61,7 +61,7 @@
     <div class="col-span-2">
       <label class="flex items-center space-x-2">
         <input type="checkbox" formControlName="support_contact" class="rounded-sm cursor-pointer">
-        <span class="text-slate-700 text-sm">Do you have a support contact person?</span>
+        <span class="text-slate-700 text-sm">Check this box to add an additional contact</span>
       </label>
     </div>
     <div>
@@ -99,11 +99,11 @@
         <small class="text-red-600" *ngIf="getFormControl('support_email')?.hasError('email')">Invalid email format</small>
       </div>
       <div>
-        <div class="flex items-end">
-          <div class="">
-            <label class="block">
-              <span class="block font-medium text-slate-700 whitespace-nowrap">Phone Number<span class="text-red-600">*</span></span>
-            </label>
+        <div class="flex flex-col">
+          <label class="block">
+            <span class="block font-medium text-slate-700 whitespace-nowrap">Phone Number<span class="text-red-600">*</span></span>
+          </label>
+          <div class="flex items-center">
             <ng-select 
               [placeholder]="'Select Country'" formControlName="support_dial_code" [searchable]="true"
               [searchable]="true" [clearable]="false" [items]="countries" bindValue="dial_code" bindLabel="name" class="mt-1"
@@ -118,9 +118,9 @@
                 {{item.dial_code}}
               </ng-template>
             </ng-select>
-          </div>
-          <div class="w-full ml-1">
-            <form-input [type]="'text'" [label]="''" [placeholder]="'00 000 000'" [controlName]="'support_msisdn'" [group]="form"></form-input>
+            <div class="w-full ml-1">
+              <form-input [type]="'text'" [label]="''" [placeholder]="'00 000 000'" [controlName]="'support_msisdn'" [group]="form"></form-input>
+            </div>
           </div>
         </div>
         <small 
