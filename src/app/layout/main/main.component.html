@@ -1,67 +1,115 @@
-<div #topSection *ngIf="product" class="p-6 md:p-10" [ngClass]="{ 'h-full flex items-center justify-center': isRequestSuccessful }">
-  <ng-container *ngIf="!isRequestSuccessful">
-    <h1 class="text-3xl text-primary mb-10 uppercase font-medium">{{product}}</h1>
-    <div class="grid md:grid-cols-4 2xl:grid-cols-5 gap-4">
-      <button type="button" class="text-left" *ngFor="let section of wizardService.sections; let i = index"
-        (click)="wizardService.navToSection(i)">
-        <div class="card"
-          [ngClass]="{'bg-gradient-primary-to-accent text-white' : !section?.hidden, 'bg-slate-200 text-gray-400': (!section.completed && section.hidden), 'border border-success-500': section.completed}">
-          <div class="flex justify-between">
+<div *ngIf="displayProducts" class="p-10 flex flex-col gap-8">
+  <div>
+    <h1 class="text-2xl text-primary font-medium">Let's get you started</h1>
+    <p class="text-sm text-slate-400">Choose from IT Consortium's collection of products to begin your journey</p>
+  </div>
+
+  <ng-container *ngIf="isLoadingProducts">
+    <div class="flex justify-center"><i-feather name="loader" style="width: 50px; height: 50px" class="text-[#0A325E] shrink-0 animate-spin"></i-feather></div>
+  </ng-container>
+
+  <ng-container *ngIf="!isLoadingProducts">
+    <div *ngIf="allProducts.length > 0; else noProducts" class="flex flex-col gap-4">
+      <form [formGroup]="searchForm" class="flex justify-center">
+        <input type="search" placeholder="Search by product name" formControlName="searchItem" (input)="onSearch()" class="lg:w-2/5 text-sm border border-slate-200 rounded-md">
+      </form>
+      <div *ngIf="filteredProducts.length > 0; else productNotFound" class="grid grid-cols-2 gap-6">
+        <div *ngFor="let product of filteredProducts">
+          <div (click)="selectProduct(product)" class="p-4 bg-white h-full flex gap-4 border-l-4 border-l-[#0A325E] cursor-pointer hover:shadow-md hove:transition hover:duration-500">
+            <i-feather name="package" class="text-[#0A325E] shrink-0"></i-feather>
             <div>
-              <span class="rounded-full border px-2 py-0.5"
-                [ngClass]="{'border-gray-400': (!section.completed && section.hidden)}">{{i + 1}}</span>
-              <span class="ml-2">{{section.title}}</span>
-            </div>
-            <div *ngIf="section.completed">
-              <i-feather name="check-circle" class="text-success-500 align-bottom"></i-feather>
+              <h4 class="text-[#0A325E] font-medium">{{ product.name }}</h4>
+              <p class="text-xs">{{ product.description }}</p>
             </div>
           </div>
         </div>
-      </button>
-    </div>
-    <br>
-    <ng-container *ngIf="requestFailed">
-      <div class="relative card bg-red-50 flex items-center gap-2.5 text-red-600 border border-red-600 rounded-md">
-        <i-feather name="alert-circle"></i-feather>
-        <p role="button" (click)="requestFailed = !requestFailed" class="absolute top-2 right-3 text-red-600">×</p>
-        <div>
-          <h2 class="text-sm font-medium">Sorry, something went wrong!</h2>
-          <p class="text-xs text-slate-600">{{ errorMessage ? errorMessage : "We were unable to process your request at this time. Please try again later or contact support for assistance."}}</p>
-        </div>
       </div>
-      <br />
+      <ng-template #productNotFound>
+        <div class="bg-white p-8 flex flex-col items-center gap-3 justify-center text-center">
+          <i-feather name="search" class="text-primary" style="width: 40px; height: 40px;"></i-feather>
+          <small class="text-slate-600">No products match your search. Please try a different keyword or clear your filters to see all available products.</small>
+        </div>
+      </ng-template>
+    </div>
+
+    <ng-template #noProducts>
+      <div class="bg-white py-10 px-4 flex flex-col items-center text-center gap-2 rounded-lg">
+        <img src="assets/images/sidebar-bg.svg" alt="org-img" width="400" loading="lazy">
+        <h2 class="text-2xl">Sorry</h2>
+        <small class="text-slate-600">There are no products to display at the moment. Please try again later or contact support for assistance.</small>
+      </div>
+    </ng-template>
+  </ng-container>
+</div>
+
+<ng-container *ngIf="!displayProducts">
+  <div #topSection *ngIf="product" class="p-6 md:p-10" [ngClass]="{ 'h-full flex items-center justify-center': isRequestSuccessful }">
+    <ng-container *ngIf="!isRequestSuccessful">
+      <div class="mb-10">
+        <h1 class="text-3xl text-primary uppercase font-medium">{{product}}</h1>
+        <p class="text-slate-400">{{ selectedProduct?.description }}</p>
+      </div>
+      <div class="grid md:grid-cols-4 2xl:grid-cols-5 gap-4">
+        <button type="button" class="text-left" *ngFor="let section of wizardService.sections; let i = index"
+          (click)="wizardService.navToSection(i)">
+          <div class="card"
+            [ngClass]="{'bg-gradient-primary-to-accent text-white' : !section?.hidden, 'bg-slate-200 text-gray-400': (!section.completed && section.hidden), 'border border-success-500': section.completed}">
+            <div class="flex justify-between">
+              <div>
+                <span class="rounded-full border px-2 py-0.5"
+                  [ngClass]="{'border-gray-400': (!section.completed && section.hidden)}">{{i + 1}}</span>
+                <span class="ml-2">{{section.title}}</span>
+              </div>
+              <div *ngIf="section.completed">
+                <i-feather name="check-circle" class="text-success-500 align-bottom"></i-feather>
+              </div>
+            </div>
+          </div>
+        </button>
+      </div>
+      <br>
+      <ng-container *ngIf="requestFailed">
+        <div class="relative card bg-red-50 flex items-center gap-2.5 text-red-600 border border-red-600 rounded-md">
+          <i-feather name="alert-circle"></i-feather>
+          <p role="button" (click)="requestFailed = !requestFailed" class="absolute top-2 right-3 text-red-600">×</p>
+          <div>
+            <h2 class="text-sm font-medium">Sorry, something went wrong!</h2>
+            <p class="text-xs text-slate-600">{{ errorMessage ? errorMessage : "We were unable to process your request at this time. Please try again later or contact support for assistance."}}</p>
+          </div>
+        </div>
+        <br />
+      </ng-container>
+      <div class="card pt-10 pb-20">
+        <ng-container *ngIf="wizardService.selectedSection.title == 'Basic Info'">
+          <app-basic-info [form]="getFormGroup('basicInfo')" [countries]="countries"></app-basic-info>
+        </ng-container>
+        <ng-container *ngIf="wizardService.selectedSection.title == 'Business Info'">
+          <app-business-info [form]="getFormGroup('businessInfo')" [countries]="countries"></app-business-info>
+        </ng-container>
+        <ng-container *ngIf="wizardService.selectedSection.title == 'Documents'">
+          <app-form-documents [form]="getFormGroup('documents')" [averageMonthlyTransValue]="form.get('businessInfo.averageMonthlyTransValue')?.value"></app-form-documents>
+        </ng-container>
+        <ng-container *ngIf="wizardService.selectedSection.title == 'Preview'">
+          <app-preview [form]="form" [countries]="countries" (requestStatus)="onRequestStatus($event)"></app-preview>
+        </ng-container>
+      </div>
     </ng-container>
-    <div class="card pt-10 pb-20">
-      <ng-container *ngIf="wizardService.selectedSection.title == 'Basic Info'">
-        <app-basic-info [form]="getFormGroup('basicInfo')" [countries]="countries"></app-basic-info>
-      </ng-container>
-      <ng-container *ngIf="wizardService.selectedSection.title == 'Business Info'">
-        <app-business-info [form]="getFormGroup('businessInfo')" [countries]="countries"></app-business-info>
-      </ng-container>
-      <ng-container *ngIf="wizardService.selectedSection.title == 'Documents'">
-        <app-form-documents [form]="getFormGroup('documents')" [averageMonthlyTransValue]="form.get('businessInfo.averageMonthlyTransValue')?.value"></app-form-documents>
-      </ng-container>
-      <ng-container *ngIf="wizardService.selectedSection.title == 'Preview'">
-        <app-preview [form]="form" [countries]="countries" (requestStatus)="onRequestStatus($event)"></app-preview>
-      </ng-container>
-    </div>
-  </ng-container>
 
-  <ng-container *ngIf="isRequestSuccessful">
-    <div class="text-center">
-      <i-feather name="check-circle" class="text-success-500" style="width: 80px; height: 80px;"></i-feather>
-      <h2 class="text-3xl my-2">Submission Successful! 🚀</h2>
-      <p class="text-gray-500">We've received your request and are excited to get you started. We will be in touch to guide you through the next steps.</p>
-    </div>
-  </ng-container>
-</div>
-
-<div *ngIf="!product" class="h-full flex flex-col items-center justify-center gap-6">
-  <i-feather name="info"></i-feather>
-  <i-feather name="alert-triangle" class="text-red-600" style="width: 48px; height: 48px;"></i-feather>
-  <div class="text-center">
-    <p class="text-2xl">Oops! Something is missing.</p>
-    <small>The requested product is absent from the URL. Please verify the link's accuracy and try again.</small>
+    <ng-container *ngIf="isRequestSuccessful">
+      <div class="text-center">
+        <i-feather name="check-circle" class="text-success-500" style="width: 80px; height: 80px;"></i-feather>
+        <h2 class="text-3xl my-2">Submission Successful! 🚀</h2>
+        <p class="text-gray-500">We've received your request and are excited to get you started. We will be in touch to guide you through the next steps.</p>
+      </div>
+    </ng-container>
   </div>
-  <button (click)="goBackHome()" class="bg-primary py-2 px-4 text-sm text-white rounded-md">Go Back</button>
-</div>
+
+  <div *ngIf="!product" class="h-full flex flex-col items-center justify-center gap-6">
+    <i-feather name="alert-triangle" class="text-red-600" style="width: 48px; height: 48px;"></i-feather>
+    <div class="text-center">
+      <p class="text-2xl">Oops! Something is missing.</p>
+      <small>The requested product is absent from the URL. Please verify the link's accuracy and try again.</small>
+    </div>
+    <button (click)="goBackHome()" class="bg-primary py-2 px-4 text-sm text-white rounded-md">Go Back</button>
+  </div>
+</ng-container>

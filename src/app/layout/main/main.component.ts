@@ -22,6 +22,7 @@ export class MainComponent implements OnInit {
   @ViewChild("topSection") topSection!: ElementRef;
 
   form: FormGroup;
+  searchForm!: FormGroup;
   countries: Country[] = [];
 
   requestId: any;
@@ -30,6 +31,14 @@ export class MainComponent implements OnInit {
   errorMessage: string = "";
   requestFailed: boolean = false;
   isRequestSuccessful: boolean = false;
+
+  isLoadingProducts: boolean = false;
+  displayProducts: boolean = true;
+  filteredProducts: any[] = [];
+  allProducts: any[] = [];
+  selectedProduct: any;
+
+  searchItem: string = "";
 
   constructor(public wizardService: WizardService, private http: HttpClient, private router: Router, private route: ActivatedRoute, private location: Location) {
     this.form = new FormGroup({
@@ -65,9 +74,76 @@ export class MainComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
-      this.product = params["product"];
+      const itcProduct = params["product"];
+
+      if (itcProduct === undefined) {
+        this.displayProducts = true;
+        this.product = "";
+      } else {
+        this.displayProducts = false;
+        this.product = itcProduct;
+      }
     });
     this.checkRouteParams();
+    this.fetchProducts();
+    
+    this.searchForm = new FormGroup({
+      searchItem: new FormControl("")
+    })
+  }
+
+  async fetchProducts(): Promise<any> {
+    const headers = new HttpHeaders({
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "x-api-key": environment.MERCHANT_CATALOGUE_API_KEY,
+    });
+    try {
+      this.isLoadingProducts = true;
+      this.http.get<any>(`${environment.MERCHANT_CATALOGUE_API_URL}/products`, { headers }).subscribe({
+        next: (res: any) => {
+          this.allProducts = res.data.data;
+          this.filteredProducts = [...this.allProducts];
+          
+          const matched = this.allProducts.find(p => p.name === this.product);
+          if (this.product && !matched) {
+            this.router.navigate([], {
+              queryParams: { product: null },
+              queryParamsHandling: "merge",
+            });
+          } else {
+            this.selectedProduct = matched;
+          }
+          this.isLoadingProducts = false;
+        }
+      });
+    } catch (error) {
+      console.error("Error fetching product data:", error);
+      this.isLoadingProducts = false;
+    }
+  }
+
+  selectProduct(product: any) {
+    this.selectedProduct = product;
+    this.router.navigate([], {
+      queryParams: { product: product.name },
+      queryParamsHandling: "merge",
+    }).then(() => {
+      this.displayProducts = false;
+    });
+  }
+
+  onSearch() {
+    const value = this.searchForm.get("searchItem")?.value || "";
+    const searchValue = value.trim().toLowerCase();
+
+    if (searchValue) {
+      this.filteredProducts = this.allProducts.filter(p =>
+        p.name.toLowerCase().includes(searchValue)
+      );
+    } else {
+      this.filteredProducts = [...this.allProducts];
+    }
   }
 
   getCountries() {
@@ -106,6 +182,9 @@ export class MainComponent implements OnInit {
     
     if (this.requestId) {
       this.populateForm(this.requestId);
+    }
+    if (this.product) {
+      this.displayProducts = false;
     }
   }
 
