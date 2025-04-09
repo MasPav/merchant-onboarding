@@ -1,7 +1,21 @@
-<div *ngIf="displayProducts" class="p-10 flex flex-col gap-8">
-  <div>
-    <h1 class="text-2xl text-primary font-medium">Let's get you started</h1>
-    <p class="text-sm text-slate-400">Choose from IT Consortium's collection of products to begin your journey</p>
+<div *ngIf="displayProducts" class="p-10 flex flex-col gap-10">
+  <div class="md:p-6 flex flex-col gap-6">
+    <div class="flex flex-col gap-1 justify-center text-center text-primary">
+      <h1 class="text-4xl font-medium">Your ideal solution awaits!</h1>
+      <p class="text-sm">Take a moment to explore our diverse range of products. We're confident you'll find exactly what you need to achieve your goals</p>
+    </div>
+    <ng-container *ngIf="allProducts.length > 0">
+      <form [formGroup]="searchForm" class="flex justify-center">
+        <div class="relative w-full md:w-2/5 2xl:w-1/3 rounded-full shadow-sm shadow-accent/25">
+          <i-feather 
+            name="search" 
+            class="absolute left-3 top-1/2 transform -translate-y-1/2 text-accent pointer-events-none"
+            style="width: 16px; height: 16px"
+          ></i-feather>
+          <input type="search" placeholder="Search product name" formControlName="searchItem" (input)="onSearch()" class="w-full pl-8 text-sm border border-slate-200 rounded-full focus:outline-none focus:ring-1 focus:ring-accent">
+        </div>
+      </form>
+    </ng-container>
   </div>
 
   <ng-container *ngIf="isLoadingProducts">
@@ -9,17 +23,14 @@
   </ng-container>
 
   <ng-container *ngIf="!isLoadingProducts">
-    <div *ngIf="allProducts.length > 0; else noProducts" class="flex flex-col gap-4">
-      <form [formGroup]="searchForm" class="flex justify-center">
-        <input type="search" placeholder="Search by product name" formControlName="searchItem" (input)="onSearch()" class="lg:w-2/5 text-sm border border-slate-200 rounded-md">
-      </form>
-      <div *ngIf="filteredProducts.length > 0; else productNotFound" class="grid grid-cols-2 gap-6">
+    <div *ngIf="allProducts.length > 0; else noProducts" class="">
+      <div *ngIf="filteredProducts.length > 0; else productNotFound" class="grid md:grid-cols-2 2xl:grid-cols-3 gap-6">
         <div *ngFor="let product of filteredProducts">
           <div (click)="selectProduct(product)" class="p-4 bg-white h-full flex gap-4 border-l-4 border-l-[#0A325E] cursor-pointer hover:shadow-md hove:transition hover:duration-500">
             <i-feather name="package" class="text-[#0A325E] shrink-0"></i-feather>
             <div>
               <h4 class="text-[#0A325E] font-medium">{{ product.name }}</h4>
-              <p class="text-xs">{{ product.description }}</p>
+              <p class="text-xs text-slate-400">{{ product.description }}</p>
             </div>
           </div>
         </div>
@@ -45,13 +56,21 @@
 <ng-container *ngIf="!displayProducts">
   <div #topSection *ngIf="product" class="p-6 md:p-10" [ngClass]="{ 'h-full flex items-center justify-center': isRequestSuccessful }">
     <ng-container *ngIf="!isRequestSuccessful">
-      <div class="mb-10">
-        <h1 class="text-3xl text-primary uppercase font-medium">{{product}}</h1>
-        <p class="text-slate-400">{{ selectedProduct?.description }}</p>
+      <div class="flex gap-2">
+        <div role="button" (click)="goBackToProducts()" class="bg-white mt-1 py-1 px-2 w-fit h-fit flex items-center justify-center rounded-md">
+          <i-feather name="arrow-left" class="text-primary shrink-0"></i-feather>
+        </div>
+        <div class="mb-10">
+          <h1 class="text-3xl text-primary uppercase font-medium">{{product}}</h1>
+          <p class="text-slate-400">{{ selectedProduct?.description }}</p>
+        </div>
       </div>
       <div class="grid md:grid-cols-4 2xl:grid-cols-5 gap-4">
         <button type="button" class="text-left" *ngFor="let section of wizardService.sections; let i = index"
-          (click)="wizardService.navToSection(i)">
+          (click)="wizardService.navToSection(i)"
+          [disabled]="!wizardService.isSectionAccessible(i)"
+          [ngClass]="{ 'cursor-not-allowed': !wizardService.isSectionAccessible(i) }"
+        >
           <div class="card"
             [ngClass]="{'bg-gradient-primary-to-accent text-white' : !section?.hidden, 'bg-slate-200 text-gray-400': (!section.completed && section.hidden), 'border border-success-500': section.completed}">
             <div class="flex justify-between">

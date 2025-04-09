@@ -107,10 +107,7 @@ export class MainComponent implements OnInit {
           
           const matched = this.allProducts.find(p => p.name === this.product);
           if (this.product && !matched) {
-            this.router.navigate([], {
-              queryParams: { product: null },
-              queryParamsHandling: "merge",
-            });
+            this.goBackToProducts();
           } else {
             this.selectedProduct = matched;
           }
@@ -144,6 +141,13 @@ export class MainComponent implements OnInit {
     } else {
       this.filteredProducts = [...this.allProducts];
     }
+  }
+
+  goBackToProducts() {
+    this.router.navigate([], {
+      queryParams: { product: null },
+      queryParamsHandling: "merge",
+    });
   }
 
   getCountries() {

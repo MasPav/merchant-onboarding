@@ -75,8 +75,8 @@ export class PreviewComponent implements OnInit {
     this.router.navigate(["/privacy-policy"]);
   }
 
-  getTier(value: string): number {
-    return value === "growing" ? 1 : value === "established" ? 2 : value === "matured" ? 3 : 0;
+  getTier(value: string): string {
+    return value === "growing" ? "1" : value === "established" ? "2" : value === "matured" ? "3" : "0";
   }
 
   async onSubmitForm() {

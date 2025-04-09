@@ -67,4 +67,8 @@ export class WizardService {
     section.completed = true;
   }
 
+  isSectionAccessible(index: number): boolean {
+    if (index === 0) return true;
+    return this.sections[index - 1]?.completed === true;
+  }
 }
