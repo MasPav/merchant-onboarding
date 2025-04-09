@@ -43,6 +43,7 @@ export class FormDocumentsComponent implements OnInit {
   selectedCategory: any = null;
   fileValidationTriggered: boolean = false;
   availableCategories: AvailableCategory[] = [];
+  availableCategoriesCopy: AvailableCategory[] = []; 
   uploadedFiles: { [key: string]: { name: string; url: string } } | any = null;
 
   constructor(public wizardService: WizardService) { }
@@ -57,6 +58,7 @@ export class FormDocumentsComponent implements OnInit {
       code: key,
       description: this.documentCategories[key]
     }));
+    this.availableCategoriesCopy = [...this.availableCategories]; 
     this.setUploadedDocs();
   }
 
@@ -79,22 +81,38 @@ export class FormDocumentsComponent implements OnInit {
   }
 
   onFileSelected(event: Event, category: AvailableCategory) {
-    const categoryKey = category.code
+    if (!category) return;
+    const categoryKey = category.code;
     const fileInput = event.target as HTMLInputElement;
     if (fileInput.files && fileInput.files.length > 0) {
       const file = fileInput.files[0];
-      !this.uploadedFiles ? this.uploadedFiles = {} : '';
+  
+      if (!this.uploadedFiles) this.uploadedFiles = {};
       this.uploadedFiles[categoryKey] = {
         name: file.name,
         url: URL.createObjectURL(file),
         categoryValue: category.description
       };
+      this.availableCategories = this.availableCategories.filter(cat => cat.code !== categoryKey);
+      this.selectedCategory = null;
+      this.form.get('uploaded_documents')?.setValue(this.uploadedFiles);
+      this.form.get('uploaded_documents')?.updateValueAndValidity();
     }
   }
-
+  
   removeFile(categoryKey: string) {
+    const removed = this.uploadedFiles[categoryKey];
+    if (!removed) return;
     delete this.uploadedFiles[categoryKey];
+    this.availableCategories.push({
+      code: categoryKey,
+      description: this.documentCategories[categoryKey as DocumentKey]
+    });
+  
+    this.form.get('uploaded_documents')?.setValue(this.uploadedFiles);
+    this.form.get('uploaded_documents')?.updateValueAndValidity();
   }
+  
 
   extractFileNameFromUrl(url: string): string {
     return url.split("/").pop() || "document.pdf";
