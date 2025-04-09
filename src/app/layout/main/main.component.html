@@ -30,7 +30,7 @@
             <i-feather name="package" class="text-[#0A325E] shrink-0"></i-feather>
             <div>
               <h4 class="text-[#0A325E] font-medium">{{ product.name }}</h4>
-              <p class="text-xs text-slate-400">{{ product.description }}</p>
+              <p [title]="product.description" class="text-xs text-slate-400 truncate max-w-xs">{{ product.description }}</p>
             </div>
           </div>
         </div>
