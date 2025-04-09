@@ -1,33 +1,33 @@
-
 <h1 class="text-2xl font-bold text-gray-800 mb-6">List of Required Documents For Tier 1</h1>
-<div class="mb-6">
-  <p class="text-gray-800">
-    Corporate entity: Has an average monthly transaction value above GHS 15,000.00
-  </p>
-</div>
 <div class="grid grid-cols-2 gap-x-6">
-  <div class="mb-8 mt-8">
-    <ul class="space-y-3 text-gray-600 list-disc border rounded-lg p-4">
-      <h2 class="text-lg font-semibold text-gray-700 mb-3">Type of Document</h2>
-      <hr>
+  <div class="mb-8">
+    <div class="text-gray-600 border rounded-lg p-4 space-y-4">
+      <div>
+        <h2 class="text-lg font-semibold text-gray-700 mb-2">Type of Document</h2>
+        <hr />
+      </div>
       <ng-container *ngFor="let category of availableCategoriesCopy; let isLast = last">
-        <ol class="mb-1">{{ category.description }}</ol>
-
-        <div *ngIf="uploadedFiles[category.code]" class="flex items-center p-3">
-          <span class="text-gray-700 truncate max-w-[80%]">{{ uploadedFiles[category.code]?.name }}</span>
-          <button (click)="removeFile(category.code)" class="ml-4">
-            <i-feather name="Trash2" class="text-red-600 cursor-pointer"></i-feather>
-          </button>
-        </div>        
-
-        <div *ngIf="fileValidationTriggered && !uploadedFiles[category.code]"
-          class="text-red-600 text-sm font-medium mt-1">
-          You forgot to upload a file
+        <div class="space-y-1">
+          <p class="font-medium">
+            {{ category.description }}
+            <small *ngIf="category.required" class="text-red-600">*</small>
+          </p>
+          <div *ngIf="uploadedFiles[category.code]" class="flex items-center">
+            <span class="text-blue-600 text-sm truncate max-w-[80%]">
+              {{ uploadedFiles[category.code]?.name }}
+            </span>
+            <div class="transform scale-50 ml-3" (click)="removeFile(category.code)">
+              <i-feather name="Trash2" class="text-red-600 cursor-pointer"></i-feather>
+            </div>
+          </div>
+          <div *ngIf="fileValidationTriggered && category.required && !uploadedFiles[category.code]"
+            class="text-red-600 text-sm font-medium">
+            You forgot to upload a file
+          </div>
+          <hr *ngIf="!isLast" class="mt-2" />
         </div>
-        <hr *ngIf="!isLast">
       </ng-container>
-    </ul>
-
+    </div>
   </div>
   <div class="mb-8">
     <label class="block text-gray-700 font-medium mb-2">Select The Type of Document To Upload</label>
@@ -35,14 +35,17 @@
       [(ngModel)]="selectedCategory" (change)="onSelectCategory($event)"
       class="border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-md">
     </ng-select>
-    <div
-      class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-blue-400 transition-colors duration-200 mt-5"
-      (click)="fileUploader.click()">
+    <div class="border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors duration-200 mt-5"
+      [ngClass]="{
+      'border-gray-300 hover:border-blue-400': selectedCategory,
+      'border-red-300 hover:border-red-500': !selectedCategory
+    }" (click)="fileUploader.click()">
       <div class="flex flex-col items-center justify-center">
         <i-feather name="upload" class="h-12 w-12 text-gray-400 mb-3"></i-feather>
-        <p class="text-gray-600 mb-1">Select a .pdf or .png file</p>
+        <p class="text-gray-600 mb-1">Upload a pdf or image</p>
       </div>
-      <input #fileUploader type="file" class="hidden" accept=".pdf" (change)="onFileSelected($event, selectedCategory)">
+      <input #fileUploader type="file" class="hidden" accept=".pdf, image/*" [disabled]="!selectedCategory"
+        (change)="onFileSelected($event, selectedCategory)">
     </div>
   </div>
 </div>
