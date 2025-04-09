@@ -191,8 +191,8 @@ export class MainComponent implements OnInit {
   async fetchMerchantData(id: string): Promise<any> {
     const headers = new HttpHeaders({
       "Content-Type": "application/json",
-      "transflowId": environment.INTERNAL_TRANSFLOW_ID,
-      "apiKey": environment.INTERNAL_MERCHANT_ONBOARDING_API_KEY,
+      "transflowId": environment.BACKOFFICE_TRANSFLOW_ID,
+      "apiKey": environment.BACKOFFICE_MERCHANT_ONBOARDING_API_KEY,
       "merchantProductId": environment.MERCHANT_PRODUCT_ID,
     });
   
