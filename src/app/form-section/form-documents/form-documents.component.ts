@@ -90,6 +90,15 @@ export class FormDocumentsComponent implements OnInit {
     this.filterDocumentsByTransactionValue();
   }
 
+  getTierNumber(): number {
+    switch(this.averageMonthlyTransValue) {
+      case 'growing': return 1;
+      case 'established': return 2;
+      case 'matured': return 3;
+      default: return 1;
+    }
+  }
+
   filterDocumentsByTransactionValue() {
     this.availableCategories = this.documentRequirements[this.averageMonthlyTransValue].map(code => ({
       code,
