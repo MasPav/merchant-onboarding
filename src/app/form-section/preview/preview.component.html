@@ -13,7 +13,7 @@
         <h1 class="text-2xl font-semibold text-gray-900">
             {{ businessInfo.business_name }}
         </h1>
-        <p class="flex items-center gap-3 text-gray-600 text-sm mt-1">
+        <p class="grid grid-cols-2 items-center gap-3 text-gray-600 text-sm mt-1">
             <span class="px-3 py-1 rounded-full text-green-600 bg-green-100 text-sm font-medium">{{ businessInfo.country_of_operation }}</span> 
             <span class="px-3 py-1 rounded-full text-purple-600 bg-purple-100 text-sm font-medium">{{ businessInfo.company_type }}</span>
         </p>
@@ -44,17 +44,17 @@
     <div *ngIf="businessInfo" class="bg-white flex flex-col gap-4 shadow-md rounded-lg p-6">
         <h2 class="text-xl font-medium text-gray-800">Business Info</h2>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Average Monthly Transaction Value', value: businessInfo.averageMonthlyTransValue.description }"></ng-container>
+            <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Tier', value: businessInfo.averageMonthlyTransValue.name  | titlecase }"></ng-container>
             <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Business Name', value: businessInfo.business_name }"></ng-container>
             <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Trade Name', value: businessInfo.trade_name || '--' }"></ng-container>
             <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Country of Operation', value: businessInfo.country_of_operation }"></ng-container>
             <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Company Type', value: businessInfo.company_type }"></ng-container>
-            <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Categories', value: selectedCategories || '--' }"></ng-container>
             <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Digital Address', value: businessInfo.digital_address }"></ng-container>
-            <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Postal Address', value: businessInfo.postal_address || 'N/A' }"></ng-container>
             <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'TIN', value: businessInfo.tin || 'N/A' }"></ng-container>
             <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Registration No.', value: businessInfo.registration_number || 'N/A' }"></ng-container>
             <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Date of incorporation', value: businessInfo.date_of_incorporation || 'N/A', type: 'date' }"></ng-container>
+            <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Postal Address', value: businessInfo.postal_address || 'N/A' }"></ng-container>
+            <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Categories', value: selectedCategories || '--' }"></ng-container>
         </div>
     </div>
   

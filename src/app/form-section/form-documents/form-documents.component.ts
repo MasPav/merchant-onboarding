@@ -126,7 +126,6 @@ export class FormDocumentsComponent implements OnInit {
     if (this.isNextDisabled()) {
       this.fileValidationTriggered = true;
     } else {
-      this.setUploadedDocs();
       this.wizardService.markSectionAsCompleted(this.wizardService.selectedSection);
       this.wizardService.moveToNextSection();
     }
