@@ -2,7 +2,7 @@
   <div class="md:p-6 flex flex-col gap-6">
     <div class="flex flex-col gap-1 justify-center text-center text-primary">
       <h1 class="text-4xl font-medium">Your ideal solution awaits!</h1>
-      <p class="text-sm">Take a moment to explore our diverse range of products. We're confident you'll find exactly what you need to achieve your goals</p>
+      <p class="text-sm">Explore our diverse range of products. We're confident you'll find exactly what you need to achieve your goals.</p>
     </div>
     <ng-container *ngIf="allProducts.length > 0">
       <form [formGroup]="searchForm" class="flex justify-center">
@@ -26,10 +26,10 @@
     <div *ngIf="allProducts.length > 0; else noProducts" class="">
       <div *ngIf="filteredProducts.length > 0; else productNotFound" class="grid md:grid-cols-2 2xl:grid-cols-3 gap-6">
         <div *ngFor="let product of filteredProducts">
-          <div (click)="selectProduct(product)" class="p-4 bg-white h-full flex gap-4 border-l-4 border-l-[#0A325E] cursor-pointer hover:shadow-md hove:transition hover:duration-500">
-            <i-feather name="package" class="text-[#0A325E] shrink-0"></i-feather>
+          <div (click)="selectProduct(product)" class="p-4 bg-white h-full flex gap-4 border-l-4 border-l-accent cursor-pointer hover:shadow-md hove:transition hover:duration-500">
+            <i-feather name="package" class="text-accent shrink-0"></i-feather>
             <div>
-              <h4 class="text-[#0A325E] font-medium">{{ product.name }}</h4>
+              <h4 class="text-primary font-medium">{{ product.name }}</h4>
               <p [title]="product.description" class="text-xs text-slate-400 truncate max-w-xs">{{ product.description }}</p>
             </div>
           </div>
@@ -57,7 +57,7 @@
   <div #topSection *ngIf="product" class="p-6 md:p-10" [ngClass]="{ 'h-full flex items-center justify-center': isRequestSuccessful }">
     <ng-container *ngIf="!isRequestSuccessful">
       <div class="flex gap-2">
-        <div role="button" (click)="goBackToProducts()" class="bg-white mt-1 py-1 px-2 w-fit h-fit flex items-center justify-center rounded-md">
+        <div role="button" (click)="goBackToProducts()" class="bg-white border border-primary mt-1 py-1 px-2 w-fit h-fit flex items-center justify-center rounded-md">
           <i-feather name="arrow-left" class="text-primary shrink-0"></i-feather>
         </div>
         <div class="mb-10">
