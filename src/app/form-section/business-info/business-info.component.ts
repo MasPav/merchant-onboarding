@@ -30,7 +30,7 @@ export class BusinessInfoComponent implements OnInit {
   ngOnInit() {
     const control = this.form.get("averageMonthlyTransValue");
     if (control?.value) {
-      this.averageMonthlyTransCategory = control?.value;
+      this.averageMonthlyTransCategory = control?.value?.name;
     }
     
     const logo = this.form.get("logo")?.value;
