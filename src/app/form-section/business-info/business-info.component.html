@@ -3,52 +3,31 @@
   <p class="text-slate-400">Now, let's learn about your business.</p>
 </div>
 
-<form [formGroup]="form">
+<ng-container *ngIf="isTierlistLoading">
+  <div class="flex justify-center"><i-feather name="loader" style="width: 50px; height: 50px" class="text-[#0A325E] shrink-0 animate-spin"></i-feather></div>
+</ng-container>
 
+<form *ngIf="!isTierlistLoading" [formGroup]="form">
   <h6 class="text-lg">What is the approximate average monthly value of all transactions processed by your business?
   </h6>
   <p class="text-slate-400">This information helps us understand the scale of your business and tailor our services
     accordingly.</p>
   <br>
   <div class="grid grid-cols-3 gap-4">
-    <button type="button" class="text-left" (click)="setAverageMonthlyTrans('growing')">
+    <button *ngFor="let tier of tiers" type="button" class="text-left" (click)="setAverageMonthlyTrans(tier)">
       <div class="card shadow-none border flex items-center hover:shadow-md"
-        [ngClass]="{'border-accent': averageMonthlyTransCategory == 'growing'}">
-        <div class="p-2 bg-blue-50 flex items-center justify-center border border-blue-100 rounded-full">
-          <i-feather name="trending-up" class="text-accent"></i-feather>
-        </div>
-        <div class="ml-4">
-          <p class="text-lg text-accent">Tier 1</p>
-          <p>Under <b>GHS 5,000</b></p>
-        </div>
-      </div>
-    </button>
-    <button type="button" class="text-left" (click)="setAverageMonthlyTrans('established')">
-      <div class="card shadow-none border flex items-center hover:shadow-md"
-        [ngClass]="{'border-accent': averageMonthlyTransCategory == 'established'}">
+        [ngClass]="{'border-accent': averageMonthlyTransCategory == tier.name}">
         <div class="p-2 bg-blue-50 flex items-center justify-center border border-blue-100 rounded-full">
           <i-feather name="award" class="text-accent"></i-feather>
         </div>
         <div class="ml-4">
-          <p class="text-lg text-accent">Tier 2</p>
-          <p> <b>GHS 5,000</b> - <b>GHS 15,000</b> </p>
-        </div>
-      </div>
-    </button>
-
-    <button type="button" class="text-left" (click)="setAverageMonthlyTrans('matured')">
-      <div class="card shadow-none border flex items-center hover:shadow-md"
-        [ngClass]="{'border-accent': averageMonthlyTransCategory == 'matured'}">
-        <div class="p-2 bg-blue-50 flex items-center justify-center border border-blue-100 rounded-full">
-          <i-feather name="star" class="text-accent"></i-feather>
-        </div>
-        <div class="ml-4">
-          <p class="text-lg text-accent">Tier 3</p>
-          <p>Above <b>GHS 15,000</b></p>
+          <p class="text-lg text-accent capitalize">{{ tier.name }}</p>
+          <p>{{ tier.description }}</p>
         </div>
       </div>
     </button>
   </div>
+  
   <p class="text-red-600"
     *ngIf="getFormControl('averageMonthlyTransValue').dirty && getFormControl('averageMonthlyTransValue').touched && getFormControl('averageMonthlyTransValue').invalid && getFormControl('averageMonthlyTransValue').hasError('required')">
     You forgot to give us a value</p>
@@ -141,15 +120,7 @@
             *ngIf="getFormControl('categories').dirty && getFormControl('categories').touched && getFormControl('categories').invalid && getFormControl('categories').hasError('required')">Category
             is required</small>
         </div>
-        <div [ngClass]="{'col-span-full': averageMonthlyTransCategory == 'growing'}">
-          <form-input [type]="'text'" [label]="'Postal Address'" [placeholder]="'Postal Address'"
-            [controlName]="'postal_address'" [group]="form"></form-input>
-          <small 
-            class="text-red-600"
-            *ngIf="getFormControl('postal_address').dirty && getFormControl('postal_address').touched && getFormControl('postal_address').invalid && getFormControl('postal_address').hasError('required')"
-          >Postal address is required</small>
-        </div>
-        <ng-container *ngIf="averageMonthlyTransCategory == 'matured'">
+        <ng-container *ngIf="averageMonthlyTransCategory == 'tier 3'">
           <div>
             <form-input [type]="'text'" [label]="'Registration No.'" [placeholder]="'...'"
               [controlName]="'registration_number'" [group]="form"></form-input>
@@ -169,8 +140,8 @@
             </label>
           </div>
         </ng-container>
-        <ng-container *ngIf="averageMonthlyTransCategory != 'growing'">
-          <div>
+        <ng-container *ngIf="averageMonthlyTransCategory != 'tier 1'">
+          <div class="col-span-full">
             <form-input 
               [type]="'text'" [label]="'TIN'" [placeholder]="'...'" [controlName]="'tin'" [group]="form"
             ></form-input>
@@ -182,6 +153,21 @@
             </small>
           </div>
         </ng-container>
+        <div class="col-span-full">
+          <label class="block">
+            <span class="block font-medium text-slate-700">
+              Postal Address<span class="text-red-600">*</span>
+            </span>
+            <textarea 
+              rows="2" formControlName="postal_address" 
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+            ></textarea>
+          </label>
+          <small 
+            class="text-red-600"
+            *ngIf="getFormControl('postal_address').dirty && getFormControl('postal_address').touched && getFormControl('postal_address').invalid && getFormControl('postal_address').hasError('required')"
+          >Postal address is required</small>
+        </div>
       </div>
     </div>
   </ng-container>

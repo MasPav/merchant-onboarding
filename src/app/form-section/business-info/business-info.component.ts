@@ -4,7 +4,7 @@ import { WizardService } from 'src/app/core/wizard.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-type averageMonthlyTransCategories = 'growing' | 'established' | 'matured';
+type averageMonthlyTransCategories = "tier 1" | "tier 2" | "tier 3";
 
 @Component({
   selector: 'app-business-info',
@@ -15,6 +15,8 @@ export class BusinessInfoComponent implements OnInit {
 
   @Input() form!: FormGroup;
   @Input() countries: any[] = [];
+  @Input() tiers: any[] = [];
+  @Input() isTierlistLoading: boolean = false;
 
   averageMonthlyTransCategory!: averageMonthlyTransCategories;
   isTaglistLoading: boolean = false;
@@ -53,18 +55,22 @@ export class BusinessInfoComponent implements OnInit {
     this.fetchTags();
   }
 
-  setAverageMonthlyTrans(category: averageMonthlyTransCategories) {
-    this.averageMonthlyTransCategory = category;
+  setAverageMonthlyTrans(category: any) {
+    const categoryItem = category;
+    this.averageMonthlyTransCategory = category.name;
+
     const tinValue = this.form.get("tin")?.value;
-    this.form.patchValue({averageMonthlyTransValue: category});
+    this.form.patchValue({ averageMonthlyTransValue: categoryItem });
 
-    this.form.removeControl("tin");
-    this.form.removeControl("registration_number");
-    this.form.removeControl("date_of_incorporation");
+    ["tin", "registration_number", "date_of_incorporation"].forEach(field => {
+      if (this.form.contains(field)) {
+        this.form.removeControl(field);
+      }
+    });
 
-    if (category === "matured") {
+    if (this.averageMonthlyTransCategory === "tier 3") {
       this.addControls(tinValue);
-    } else if (category === "established") {
+    } else if (this.averageMonthlyTransCategory === "tier 2") {
       this.form.addControl("tin", new FormControl(tinValue || null, Validators.required));
     }
 

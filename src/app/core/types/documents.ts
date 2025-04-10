@@ -1,4 +1,4 @@
-export type TransactionValue = "growing" | "established" | "matured";
+export type TransactionValue = "tier 1" | "tier 2" | "tier 3";
 
 export type DocumentKey =
   | "ghana_card"

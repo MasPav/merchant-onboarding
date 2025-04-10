@@ -103,7 +103,7 @@
           <app-basic-info [form]="getFormGroup('basicInfo')" [countries]="countries"></app-basic-info>
         </ng-container>
         <ng-container *ngIf="wizardService.selectedSection.title == 'Business Info'">
-          <app-business-info [form]="getFormGroup('businessInfo')" [countries]="countries"></app-business-info>
+          <app-business-info [form]="getFormGroup('businessInfo')" [countries]="countries" [tiers]="tiers" [isTierlistLoading]="isTierlistLoading"></app-business-info>
         </ng-container>
         <ng-container *ngIf="wizardService.selectedSection.title == 'Documents'">
           <app-form-documents [form]="getFormGroup('documents')" [averageMonthlyTransValue]="form.get('businessInfo.averageMonthlyTransValue')?.value"></app-form-documents>

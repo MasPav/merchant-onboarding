@@ -44,7 +44,7 @@
     <div *ngIf="businessInfo" class="bg-white flex flex-col gap-4 shadow-md rounded-lg p-6">
         <h2 class="text-xl font-medium text-gray-800">Business Info</h2>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Average Monthly Transaction Value', value: averageMonthlyTransMap[businessInfo.averageMonthlyTransValue] }"></ng-container>
+            <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Average Monthly Transaction Value', value: businessInfo.averageMonthlyTransValue.description }"></ng-container>
             <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Business Name', value: businessInfo.business_name }"></ng-container>
             <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Trade Name', value: businessInfo.trade_name || '--' }"></ng-container>
             <ng-container *ngTemplateOutlet="infoTemplate; context: { title: 'Country of Operation', value: businessInfo.country_of_operation }"></ng-container>

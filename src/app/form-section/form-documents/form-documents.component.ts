@@ -12,7 +12,7 @@ interface AvailableCategory { code: string, description: string, required: boole
 export class FormDocumentsComponent implements OnInit {
 
   @ViewChild('fileUploader') fileUploader!: ElementRef;
-  @Input() averageMonthlyTransValue!: TransactionValue;
+  @Input() averageMonthlyTransValue!: { name: TransactionValue, description: string };
   @Input() form!: FormGroup;
 
   documentCategories: Record<DocumentKey, { name: string; required: boolean }> = {
@@ -68,9 +68,9 @@ export class FormDocumentsComponent implements OnInit {
   
 
   documentRequirements: Record<TransactionValue, DocumentKey[]> = {
-    growing: ["ghana_card", "operation_license", "product_service_description"],
-    established: ["ghana_card", "operation_license", "product_service_description"],
-    matured: [
+    "tier 1": ["ghana_card", "operation_license", "product_service_description"],
+    "tier 2": ["ghana_card", "operation_license", "product_service_description"],
+    "tier 3": [
       "business_registration", "ghana_card", "ownership_structure", "operation_license",
       "product_description", "aml_fraud_policy", "data_protection_certificate",
       "vulnerability_test_report", "due_diligence"
@@ -78,6 +78,7 @@ export class FormDocumentsComponent implements OnInit {
   };
 
   selectedCategory: any = null;
+  selectedTier!: TransactionValue;
   fileValidationTriggered: boolean = false;
   availableCategories: AvailableCategory[] = [];
   availableCategoriesCopy: AvailableCategory[] = []; 
@@ -86,21 +87,22 @@ export class FormDocumentsComponent implements OnInit {
   constructor(public wizardService: WizardService) { }
 
   ngOnInit() {
+    this.selectedTier = this.averageMonthlyTransValue.name;
     this.uploadedFiles = this.form.value.uploaded_documents;
     this.filterDocumentsByTransactionValue();
   }
 
   getTierNumber(): number {
-    switch(this.averageMonthlyTransValue) {
-      case 'growing': return 1;
-      case 'established': return 2;
-      case 'matured': return 3;
+    switch(this.selectedTier) {
+      case "tier 1": return 1;
+      case "tier 2": return 2;
+      case "tier 3": return 3;
       default: return 1;
     }
   }
 
   filterDocumentsByTransactionValue() {
-    this.availableCategories = this.documentRequirements[this.averageMonthlyTransValue].map(code => ({
+    this.availableCategories = this.documentRequirements[this.selectedTier].map(code => ({
       code,
       description: this.documentCategories[code].name,
       required: this.documentCategories[code].required

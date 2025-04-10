@@ -38,7 +38,9 @@ export class MainComponent implements OnInit {
   allProducts: any[] = [];
   selectedProduct: any;
 
+  isTierlistLoading: boolean = false;
   searchItem: string = "";
+  tiers: any[] = [];
 
   constructor(public wizardService: WizardService, private http: HttpClient, private router: Router, private route: ActivatedRoute, private location: Location) {
     this.form = new FormGroup({
@@ -65,6 +67,7 @@ export class MainComponent implements OnInit {
         uploaded_documents: new FormControl(null, [])
       })
     });
+    this.fetchTiers();
     this.getCountries();
   }
 
@@ -190,6 +193,36 @@ export class MainComponent implements OnInit {
     if (this.product) {
       this.displayProducts = false;
     }
+  }
+
+  private apiCall({ path, onSuccess }: { path: string; onSuccess: (res: any) => void }) {
+    this["isTierlistLoading"] = true;
+    
+    const url = `${environment.MERCHANT_CATALOGUE_API_URL}${path}`;
+    const headers = new HttpHeaders({
+      "Content-Type": "application/json",
+      "x-api-key": `${environment.MERCHANT_CATALOGUE_API_KEY}`,
+    });
+
+    try {
+      this.http.get(url, { headers }).subscribe({
+        next: onSuccess,
+        error: () => {},
+        complete: () => (this["isTierlistLoading"] = false),
+      });
+    } catch (e: any) {
+      console.error("Error:", e);
+      this["isTierlistLoading"] = false;
+    }
+  }
+  
+  fetchTiers() {
+    this.apiCall({
+      path: "/tiers",
+      onSuccess: (res: any) => {
+        this.tiers = res.data;
+      }
+    });
   }
 
   async fetchMerchantData(id: string): Promise<any> {

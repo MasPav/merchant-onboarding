@@ -31,19 +31,9 @@ export class PreviewComponent implements OnInit {
 
   constructor(public wizardService: WizardService, private router: Router, private http: HttpClient) {
     this.s3Client = new S3Client({
-      region: environment.AWS_REGION,
-      credentials: {
-        accessKeyId: environment.AWS_ACCESS_KEY,
-        secretAccessKey: environment.AWS_SECRET
-      }
+      region: environment.AWS_REGION
     });
   }
-
-  averageMonthlyTransMap: { [key: string]: string } = {
-    growing: "Under GHS 5,000",
-    established: "GHS 5,000 - GHS 15,000",
-    matured: "Above GHS 15,000"
-  };
   
   ngOnInit(): void {
     this.basicInfo = this.form.get("basicInfo")?.value || {};
@@ -127,7 +117,7 @@ export class PreviewComponent implements OnInit {
             companyLogo: this.businessInfo.logo ? URL.createObjectURL(this.businessInfo.logo) : "",
             typeOfCompany: this.businessInfo.company_type || "",
             companyCategories: this.businessInfo.categories.map((c: any) => c.name) || [],
-            tier: this.getTier(this.businessInfo.averageMonthlyTransValue),
+            tier: this.businessInfo.averageMonthlyTransValue.name,
             basicInfo: {
               surname: this.basicInfo.surname,
               otherNames: this.basicInfo.othernames,
